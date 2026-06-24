@@ -36,8 +36,8 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Phone className="w-3.5 h-3.5 text-gold" />
-            <a href="tel:+5978412345" className="hover:text-gold transition-colors">
-              +597 841 2345
+            <a href="tel:+5977202090" className="hover:text-gold transition-colors">
+              +597 720 2090
             </a>
           </div>
           <div className="flex items-center gap-4">
