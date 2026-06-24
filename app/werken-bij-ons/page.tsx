@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, ArrowRight, GraduationCap, Briefcase } from "lucide-react";
+import { CheckCircle, ArrowRight, GraduationCap, Briefcase, TrendingUp, Target, Users, Lightbulb } from "lucide-react";
 
 export const metadata = { title: "Werken bij ons | Vliet Accountants & Consultants" };
 
@@ -40,25 +40,25 @@ const disciplines = [
 
 const reasons = [
   {
-    icon: "📈",
+    icon: TrendingUp,
     title: "Professionele groei",
     description:
       "Wij geloven in continu leren en ontwikkelen. Daarom stimuleren wij onze medewerkers om opleidingen te volgen, certificeringen te behalen en hun kennis voortdurend uit te breiden.",
   },
   {
-    icon: "🎯",
+    icon: Target,
     title: "Uitdagende opdrachten",
     description:
       "Onze cliënten zijn actief in uiteenlopende sectoren. Hierdoor werk je aan diverse vraagstukken op het gebied van financiële verslaggeving, governance, risicomanagement en strategische besluitvorming.",
   },
   {
-    icon: "🤝",
+    icon: Users,
     title: "Persoonlijke aandacht",
     description:
       "Bij Vliet ben je geen nummer. Wij investeren in coaching, begeleiding en kennisdeling zodat iedere medewerker zijn of haar potentieel optimaal kan benutten.",
   },
   {
-    icon: "💡",
+    icon: Lightbulb,
     title: "Impact maken",
     description:
       "Het werk dat wij doen heeft directe invloed op organisaties, bestuurders en stakeholders. Jouw bijdrage helpt organisaties beter te presteren en duurzame waarde te creëren.",
@@ -94,15 +94,20 @@ export default function WerkenBijOnsPage() {
             <h2 className="text-3xl font-bold text-navy">Wat wij jou bieden</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {reasons.map((reason) => (
-              <Card key={reason.title} className="border border-gray-100 hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="text-3xl mb-4">{reason.icon}</div>
-                  <h3 className="font-semibold text-navy text-lg mb-3">{reason.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{reason.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+            {reasons.map((reason) => {
+              const Icon = reason.icon;
+              return (
+                <Card key={reason.title} className="border border-gray-100 hover:border-navy/20 hover:shadow-lg transition-all duration-200 group hover:-translate-y-1">
+                  <CardContent className="p-6">
+                    <div className="w-12 h-12 rounded-xl bg-navy/5 flex items-center justify-center mb-4 group-hover:bg-navy transition-colors">
+                      <Icon className="w-6 h-6 text-navy group-hover:text-white transition-colors" />
+                    </div>
+                    <h3 className="font-semibold text-navy text-lg mb-3">{reason.title}</h3>
+                    <p className="text-gray-500 text-sm leading-relaxed">{reason.description}</p>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           <div className="mt-12 bg-gray-50 rounded-2xl p-8">
