@@ -42,10 +42,10 @@ export default function Navbar() {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-gold transition-colors">
+              <a href="https://www.facebook.com/profile.php?id=100073261638677" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-gold transition-colors">
                 <FacebookIcon className="w-4 h-4" />
               </a>
-              <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-gold transition-colors">
+              <a href="https://www.linkedin.com/company/vliet-accountants-consultants/posts/?feedView=all" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-gold transition-colors">
                 <LinkedInIcon className="w-4 h-4" />
               </a>
             </div>

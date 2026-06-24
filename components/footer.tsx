@@ -97,7 +97,7 @@ export default function Footer() {
             </h3>
             <div className="flex items-center gap-4">
               <a
-                href="https://www.facebook.com"
+                href="https://www.facebook.com/profile.php?id=100073261638677"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
@@ -106,7 +106,7 @@ export default function Footer() {
                 <FacebookIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://www.linkedin.com"
+                href="https://www.linkedin.com/company/vliet-accountants-consultants/posts/?feedView=all"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"

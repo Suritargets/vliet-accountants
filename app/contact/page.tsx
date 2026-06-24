@@ -88,7 +88,7 @@ export default function ContactPage() {
                 <h3 className="font-semibold text-navy mb-4">Volg ons op social media</h3>
                 <div className="flex items-center gap-4">
                   <a
-                    href="https://www.facebook.com"
+                    href="https://www.facebook.com/profile.php?id=100073261638677"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:border-navy hover:text-navy transition-colors text-gray-400"
@@ -96,7 +96,7 @@ export default function ContactPage() {
                     <FacebookIcon className="w-4 h-4" />
                   </a>
                   <a
-                    href="https://www.linkedin.com"
+                    href="https://www.linkedin.com/company/vliet-accountants-consultants/posts/?feedView=all"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:border-navy hover:text-navy transition-colors text-gray-400"
