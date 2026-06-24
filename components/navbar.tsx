@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, Phone, ChevronDown } from "lucide-react";
-import { FacebookIcon, LinkedInIcon } from "@/components/social-icons";
+import { Menu, ChevronDown } from "lucide-react";
+import { WhatsAppIcon, FacebookIcon, LinkedInIcon } from "@/components/social-icons";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -35,8 +35,8 @@ export default function Navbar() {
       <div className="bg-navy text-white text-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Phone className="w-3.5 h-3.5 text-gold" />
-            <a href="tel:+5977202090" className="hover:text-gold transition-colors">
+            <WhatsAppIcon className="w-3.5 h-3.5 text-gold" />
+            <a href="https://wa.me/5977202090" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">
               +597 720 2090
             </a>
           </div>
