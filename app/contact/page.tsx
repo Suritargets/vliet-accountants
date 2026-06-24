@@ -209,6 +209,25 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      {/* Google Maps */}
+      <section className="bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+          <h2 className="text-2xl font-bold text-navy mb-6 pt-0">Onze locatie</h2>
+          <div className="rounded-2xl overflow-hidden shadow-md border border-gray-100">
+            <iframe
+              src="https://maps.google.com/maps?q=5.82883,-55.15789&z=17&output=embed"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Vliet Accountants & Consultants locatie"
+            />
+          </div>
+        </div>
+      </section>
     </>
   );
 }
