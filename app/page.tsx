@@ -78,9 +78,18 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="relative bg-navy text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-[#0f1d3a]" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full border border-white/5 translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full border border-white/5 -translate-x-1/2 translate-y-1/2" />
+        {/* Video background */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-navy/75" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-36">
           <div className="max-w-3xl">
             <Badge className="mb-6 bg-gold/20 text-gold border-gold/30 hover:bg-gold/20">
