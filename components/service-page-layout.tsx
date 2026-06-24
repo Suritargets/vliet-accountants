@@ -33,8 +33,12 @@ export default function ServicePageLayout({
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative bg-navy text-white py-20 overflow-hidden">
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-navy/75" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/diensten"
             className="inline-flex items-center gap-2 text-white/60 hover:text-gold text-sm mb-8 transition-colors"

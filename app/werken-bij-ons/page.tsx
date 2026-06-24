@@ -69,8 +69,12 @@ export default function WerkenBijOnsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative bg-navy text-white py-20 overflow-hidden">
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-navy/75" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 hover:bg-gold/20">Werken bij ons</Badge>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 max-w-3xl leading-tight">
             Bouw mee aan vertrouwen, kwaliteit en duurzame waarde
