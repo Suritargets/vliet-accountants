@@ -171,8 +171,8 @@ export default function HomePage() {
             <div className="relative space-y-6">
               <div className="rounded-2xl overflow-hidden shadow-xl">
                 <Image
-                  src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80"
-                  alt="Accountancy werkzaamheden"
+                  src="/images/Voorpagina.jpg"
+                  alt="Vliet Accountants"
                   width={640}
                   height={400}
                   className="w-full h-72 object-cover"
