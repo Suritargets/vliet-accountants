@@ -98,7 +98,7 @@ export default function OverOnsPage() {
             </div>
             <div className="rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="/images/team-office.jpeg"
+                src="/images/Voorpagina.jpg"
                 alt="Vliet Accountants kantoor"
                 width={640}
                 height={480}
