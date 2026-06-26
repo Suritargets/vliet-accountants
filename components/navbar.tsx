@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Menu, ChevronDown } from "lucide-react";
 import { WhatsAppIcon, FacebookIcon, LinkedInIcon } from "@/components/social-icons";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,15 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const navClass = (href: string) =>
+    `px-4 py-2 text-sm font-medium rounded transition-colors ${
+      isActive(href)
+        ? "text-navy font-semibold border-b-2 border-gold"
+        : "text-gray-700 hover:text-navy hover:bg-gray-50"
+    }`;
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
@@ -75,7 +85,7 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
-            <Link href="/" className="px-4 py-2 text-sm font-medium text-gray-700 rounded hover:text-navy hover:bg-gray-50 transition-colors">
+            <Link href="/" className={navClass("/")}>
               Home
             </Link>
 
@@ -87,7 +97,7 @@ export default function Navbar() {
             >
               <Link
                 href="/diensten"
-                className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 rounded hover:text-navy hover:bg-gray-50 transition-colors"
+                className={`flex items-center gap-1 ${navClass("/diensten")}`}
               >
                 Diensten
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${servicesOpen ? "rotate-180" : ""}`} />
@@ -121,7 +131,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-gray-700 rounded hover:text-navy hover:bg-gray-50 transition-colors"
+                className={navClass(link.href)}
               >
                 {link.label}
               </Link>
@@ -142,7 +152,7 @@ export default function Navbar() {
                 <Link
                   href="/"
                   onClick={() => setOpen(false)}
-                  className="px-4 py-3 text-base font-medium text-gray-700 rounded hover:text-navy hover:bg-gray-50 transition-colors"
+                  className={`px-4 py-3 text-base rounded transition-colors ${isActive("/") ? "text-navy font-semibold border-l-4 border-gold pl-3" : "font-medium text-gray-700 hover:text-navy hover:bg-gray-50"}`}
                 >
                   Home
                 </Link>
@@ -184,7 +194,7 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="px-4 py-3 text-base font-medium text-gray-700 rounded hover:text-navy hover:bg-gray-50 transition-colors"
+                    className={`px-4 py-3 text-base rounded transition-colors ${isActive(link.href) ? "text-navy font-semibold border-l-4 border-gold pl-3" : "font-medium text-gray-700 hover:text-navy hover:bg-gray-50"}`}
                   >
                     {link.label}
                   </Link>
