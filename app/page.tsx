@@ -17,6 +17,20 @@ import { LinkedInIcon } from "@/components/social-icons";
 
 const services = [
   {
+    icon: FileText,
+    title: "Accounting & Reporting",
+    description:
+      "Ondersteuning bij financiële verslaggeving, jaarrekeningen en compliance voor betrouwbare en tijdige rapportages.",
+    href: "/diensten/accounting-reporting",
+  },
+  {
+    icon: Lightbulb,
+    title: "Advisory & Risk Management",
+    description:
+      "Strategisch financieel advies gericht op waardecreatie, risicobeheersing en performance verbetering.",
+    href: "/diensten/advisory-training",
+  },
+  {
     icon: Shield,
     title: "Audit & Assurance",
     description:
@@ -31,25 +45,11 @@ const services = [
     href: "/diensten/internal-audit-risk-governance",
   },
   {
-    icon: FileText,
-    title: "Accounting & Reporting",
-    description:
-      "Ondersteuning bij financiële verslaggeving, jaarrekeningen en compliance voor betrouwbare en tijdige rapportages.",
-    href: "/diensten/accounting-reporting",
-  },
-  {
     icon: Scale,
     title: "Tax & Compliance",
     description:
       "Specialistisch belastingadvies en ondersteuning bij fiscale en wettelijke verplichtingen om risico's te beheersen.",
     href: "/diensten/tax-compliance",
-  },
-  {
-    icon: Lightbulb,
-    title: "Advisory & Risk Management",
-    description:
-      "Strategisch financieel advies gericht op waardecreatie, risicobeheersing en performance verbetering.",
-    href: "/diensten/advisory-training",
   },
   {
     icon: FolderKanban,

@@ -8,6 +8,20 @@ export const metadata = { title: "Diensten | Vliet Accountants & Consultants" };
 
 const services = [
   {
+    icon: FileText,
+    title: "Accounting & Reporting",
+    description:
+      "Deskundige ondersteuning bij financiële verslaggeving, jaarrekeningen, managementrapportages en complexe accountingvraagstukken.",
+    href: "/diensten/accounting-reporting",
+  },
+  {
+    icon: Lightbulb,
+    title: "Advisory & Training",
+    description:
+      "Praktisch advies en professionele trainingen gericht op het verbeteren van prestaties, kennis en besluitvorming.",
+    href: "/diensten/advisory-training",
+  },
+  {
     icon: Shield,
     title: "Audit & Assurance",
     description:
@@ -22,25 +36,11 @@ const services = [
     href: "/diensten/internal-audit-risk-governance",
   },
   {
-    icon: FileText,
-    title: "Accounting & Reporting",
-    description:
-      "Deskundige ondersteuning bij financiële verslaggeving, jaarrekeningen, managementrapportages en complexe accountingvraagstukken.",
-    href: "/diensten/accounting-reporting",
-  },
-  {
     icon: Scale,
     title: "Tax & Compliance",
     description:
       "Advies en ondersteuning op het gebied van fiscaliteit, belastingverplichtingen en naleving van wet- en regelgeving.",
     href: "/diensten/tax-compliance",
-  },
-  {
-    icon: Lightbulb,
-    title: "Advisory & Training",
-    description:
-      "Praktisch advies en professionele trainingen gericht op het verbeteren van prestaties, kennis en besluitvorming.",
-    href: "/diensten/advisory-training",
   },
   {
     icon: FolderKanban,

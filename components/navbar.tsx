@@ -10,11 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const services = [
+  { label: "Accounting & Reporting", href: "/diensten/accounting-reporting" },
+  { label: "Advisory & Training", href: "/diensten/advisory-training" },
   { label: "Audit & Assurance", href: "/diensten/audit-assurance" },
   { label: "Internal Audit, Risk & Governance", href: "/diensten/internal-audit-risk-governance" },
-  { label: "Accounting & Reporting", href: "/diensten/accounting-reporting" },
   { label: "Tax & Compliance", href: "/diensten/tax-compliance" },
-  { label: "Advisory & Training", href: "/diensten/advisory-training" },
   { label: "Transformation & Project Management", href: "/diensten/transformation-project-management" },
 ];
 
