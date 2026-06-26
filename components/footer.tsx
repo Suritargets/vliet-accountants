@@ -121,7 +121,10 @@ export default function Footer() {
         <Separator className="my-8 bg-white/10" />
 
         <div className="text-center text-white/50 text-sm">
-          © 2025 Vliet Accountants & Consultants. Alle rechten voorbehouden.
+          © 2025 Vliet Accountants & Consultants. Alle rechten voorbehouden. — 2026 | Design by{" "}
+          <a href="https://www.suritargets.com/en" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors underline underline-offset-2">
+            Suritargets
+          </a>
         </div>
       </div>
     </footer>
