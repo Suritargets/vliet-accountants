@@ -25,7 +25,7 @@ const services = [
   },
   {
     icon: Lightbulb,
-    title: "Advisory & Risk Management",
+    title: "Advisory & Training",
     description:
       "Strategisch financieel advies gericht op waardecreatie, risicobeheersing en performance verbetering.",
     href: "/diensten/advisory-training",
@@ -39,7 +39,7 @@ const services = [
   },
   {
     icon: BarChart3,
-    title: "Internal Audit & Governance",
+    title: "Internal Audit, Risk & Governance",
     description:
       "Versterking van governance en interne beheersing door internal audit, risk assessments en evaluatie van beheersmaatregelen.",
     href: "/diensten/internal-audit-risk-governance",
@@ -53,7 +53,7 @@ const services = [
   },
   {
     icon: FolderKanban,
-    title: "Consultancy & Training",
+    title: "Transformation & Project Management",
     description:
       "Advies en maatwerktrainingen op het gebied van corporate governance, compliance en interne beheersing.",
     href: "/diensten/transformation-project-management",
