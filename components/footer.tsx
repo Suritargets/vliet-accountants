@@ -120,11 +120,23 @@ export default function Footer() {
 
         <Separator className="my-8 bg-white/10" />
 
-        <div className="text-center text-white/50 text-sm">
-          © 2025 Vliet Accountants & Consultants. Alle rechten voorbehouden. — 2026 | Design by{" "}
-          <a href="https://www.suritargets.com/en" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors underline underline-offset-2">
-            Suritargets
-          </a>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-white/50 text-sm">
+          <span>
+            © 2025 Vliet Accountants &amp; Consultants. Alle rechten voorbehouden. — 2026 | Design by{" "}
+            <a href="https://www.suritargets.com/en" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors underline underline-offset-2">
+              Suritargets
+            </a>
+          </span>
+          <span className="hidden sm:inline text-white/20">|</span>
+          <div className="flex items-center gap-3">
+            <Link href="/privacy-policy" className="hover:text-gold transition-colors underline underline-offset-2">
+              Privacy Policy
+            </Link>
+            <span className="text-white/20">|</span>
+            <Link href="/algemene-voorwaarden" className="hover:text-gold transition-colors underline underline-offset-2">
+              Algemene Voorwaarden
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
