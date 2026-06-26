@@ -61,9 +61,9 @@ const services = [
 ];
 
 const teamMembers = [
-  { name: "Guillaume Vliet MSc RA CA", role: "Managing Director", linkedin: "#", photo: "/images/team-1.jpeg" },
-  { name: "Majugra Andias MoA", role: "Supervisor", linkedin: "#", photo: "/images/team-2.jpg" },
-  { name: "Natasha Anylus", role: "Senior Consultant", linkedin: "#", photo: "/images/natasha pasfoto.jpeg" },
+  { name: "Guillaume Vliet MSc RA CA", role: "Managing Director", linkedin: "#", photo: "/images/team-1.jpeg", position: "object-top" },
+  { name: "Majugra Andias MoA", role: "Supervisor", linkedin: "#", photo: "/images/team-2.jpg", position: "object-top" },
+  { name: "Natasha Anylus", role: "Senior Consultant", linkedin: "#", photo: "/images/natasha pasfoto.jpeg", position: "object-center" },
 ];
 
 const highlights = [
@@ -237,7 +237,7 @@ export default function HomePage() {
                     src={member.photo}
                     alt={member.name}
                     fill
-                    className="object-cover object-top"
+                    className={`object-cover ${member.position}`}
                   />
                 </div>
                 <CardContent className="p-6">
