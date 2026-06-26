@@ -56,7 +56,7 @@ export default function DienstenPage() {
     <>
       <section className="relative bg-navy text-white py-20 overflow-hidden">
         <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-          <source src="/videos/website.mp4" type="video/mp4" />
+          <source src="/videos/Video_1.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-navy/75" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
