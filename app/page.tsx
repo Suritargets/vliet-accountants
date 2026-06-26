@@ -187,10 +187,10 @@ export default function HomePage() {
       <section className="py-14 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-10">Aangesloten bij</p>
-          <div className="flex flex-wrap items-center justify-center gap-16">
-            <Image src="/images/cert-nba.png" alt="NBA" width={180} height={70} className="h-16 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+          <div className="flex flex-wrap items-center justify-center gap-20">
+            <Image src="/images/cert-nba.png" alt="NBA" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
             {/* IAASB — cropped to show only the blue IAASB box (right-anchored) */}
-            <div className="overflow-hidden h-16 relative opacity-70 hover:opacity-100 transition-opacity" style={{ width: '110px' }}>
+            <div className="overflow-hidden h-24 relative opacity-70 hover:opacity-100 transition-opacity" style={{ width: '165px' }}>
               <div style={{ position: 'absolute', right: 0, top: 0, height: '100%' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -200,7 +200,7 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <Image src="/images/cert-scai.png" alt="SCAI" width={180} height={70} className="h-16 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+            <Image src="/images/cert-scai.png" alt="SCAI" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
           </div>
         </div>
       </section>
