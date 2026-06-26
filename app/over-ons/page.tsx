@@ -109,42 +109,38 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      {/* Vision + Certifications */}
+      {/* Vision */}
       <section className="py-20 bg-gray-50">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-navy mb-6">Onze visie</h2>
+          <div className="space-y-4 text-gray-600 leading-relaxed">
+            <p>
+              Wij geloven dat organisaties het meest succesvol zijn wanneer zij beschikken over
+              betrouwbare informatie, sterke governance, effectieve risicobeheersing en deskundige
+              ondersteuning bij belangrijke beslissingen.
+            </p>
+            <p>
+              Onze ambitie is om organisaties te helpen groeien, verbeteren en toekomstbestendig
+              te worden door hoogwaardige dienstverlening te combineren met praktische inzichten
+              en persoonlijke betrokkenheid.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Aangesloten bij */}
+      <section className="py-14 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-navy mb-6">Onze visie</h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed">
-                <p>
-                  Wij geloven dat organisaties het meest succesvol zijn wanneer zij beschikken over
-                  betrouwbare informatie, sterke governance, effectieve risicobeheersing en deskundige
-                  ondersteuning bij belangrijke beslissingen.
-                </p>
-                <p>
-                  Onze ambitie is om organisaties te helpen groeien, verbeteren en toekomstbestendig
-                  te worden door hoogwaardige dienstverlening te combineren met praktische inzichten
-                  en persoonlijke betrokkenheid.
-                </p>
+          <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-10">Aangesloten bij</p>
+          <div className="flex flex-wrap items-center justify-center gap-20">
+            <Image src="/images/cert-nba.png" alt="NBA" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+            <div className="overflow-hidden h-24 relative opacity-70 hover:opacity-100 transition-opacity" style={{ width: '165px' }}>
+              <div style={{ position: 'absolute', right: 0, top: 0, height: '100%' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/cert-iaasb.png" alt="IAASB" style={{ height: '100%', width: 'auto', maxWidth: 'none' }} />
               </div>
             </div>
-            <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-6">Aangesloten bij</p>
-              <div className="space-y-6">
-                <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-50 bg-gray-50/50">
-                  <Image src="/images/cert-nba.png" alt="NBA" width={120} height={50} className="h-10 w-auto object-contain" />
-                  <p className="text-sm text-gray-600">Koninklijke Nederlandse Beroepsorganisatie van Accountants</p>
-                </div>
-                <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-50 bg-gray-50/50">
-                  <Image src="/images/cert-iaasb.png" alt="IAASB" width={140} height={50} className="h-10 w-auto object-contain" />
-                  <p className="text-sm text-gray-600">International Auditing and Assurance Standards Board</p>
-                </div>
-                <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-50 bg-gray-50/50">
-                  <Image src="/images/cert-scai.png" alt="SCAI" width={100} height={50} className="h-10 w-auto object-contain" />
-                  <p className="text-sm text-gray-600">Surinaamse Commissie Accountancy en Informatica</p>
-                </div>
-              </div>
-            </div>
+            <Image src="/images/cert-scai.png" alt="SCAI" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
           </div>
         </div>
       </section>
