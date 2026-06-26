@@ -30,7 +30,7 @@ const values = [
 const teamMembers = [
   { name: "Guillaume Vliet MSc RA CA", role: "Managing Director", linkedin: "#", photo: "/images/team-1.jpeg" },
   { name: "Majugra Andias MoA", role: "Supervisor", linkedin: "#", photo: "/images/team-2.jpg" },
-  { name: "Natasha Anylus", role: "Senior Consultant", linkedin: "#", photo: "/images/natasha foto.jpeg" },
+  { name: "Natasha Anylus", role: "Senior Consultant", linkedin: "#", photo: "/images/natasha pasfoto.jpeg" },
 ];
 
 const services = [
