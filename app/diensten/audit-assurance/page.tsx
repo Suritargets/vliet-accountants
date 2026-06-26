@@ -50,7 +50,7 @@ export default function AuditAssurancePage() {
       ]}
       ctaTitle="Klaar om uw organisatie verder te versterken?"
       ctaText="Onze audit- en assurancediensten helpen organisaties bij het vergroten van vertrouwen, het beheersen van risico's en het versterken van de kwaliteit van financiële en operationele informatie. Neem contact met ons op voor een vrijblijvend gesprek."
-      image="/images/dienst-audit.jpg"
+      image="/images/Audit & Assurance.jpg"
     />
   );
 }

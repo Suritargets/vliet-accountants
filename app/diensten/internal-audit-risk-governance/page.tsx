@@ -55,7 +55,7 @@ export default function InternalAuditPage() {
       ]}
       ctaTitle="Klaar om uw organisatie verder te versterken?"
       ctaText="Wij helpen organisaties bij het verbeteren van governance, het beheersen van risico's en het versterken van interne beheersing. Neem contact met ons op voor een vrijblijvend gesprek."
-      image="/images/dienst-internal-audit.jpg"
+      image="/images/Governance, Internal audit & Risk.jpg"
     />
   );
 }

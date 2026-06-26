@@ -55,7 +55,7 @@ export default function AccountingReportingPage() {
       ]}
       ctaTitle="Klaar om uw financiële informatievoorziening te versterken?"
       ctaText="Wij helpen organisaties bij het verbeteren van financiële verslaggeving, managementinformatie en rapportageprocessen. Neem contact met ons op voor een vrijblijvend gesprek."
-      image="/images/dienst-accounting.jpg"
+      image="/images/Accounting & Reporting.jpg"
     />
   );
 }
