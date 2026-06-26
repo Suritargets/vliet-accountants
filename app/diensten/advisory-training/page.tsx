@@ -55,6 +55,7 @@ export default function AdvisoryTrainingPage() {
       ]}
       ctaTitle="Klaar om uw organisatie verder te ontwikkelen?"
       ctaText="Wij helpen organisaties bij het verbeteren van prestaties, het versterken van kennis en het realiseren van duurzame groei. Neem contact met ons op voor een vrijblijvend gesprek."
+      image="/images/dienst-advisory.jpg"
     />
   );
 }

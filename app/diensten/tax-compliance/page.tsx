@@ -55,6 +55,7 @@ export default function TaxCompliancePage() {
       ]}
       ctaTitle="Klaar om fiscale risico's te beheersen en compliance te versterken?"
       ctaText="Wij ondersteunen organisaties bij fiscale vraagstukken, belastingverplichtingen en compliance-uitdagingen. Neem contact met ons op voor een vrijblijvend gesprek."
+      image="/images/dienst-tax.jpg"
     />
   );
 }

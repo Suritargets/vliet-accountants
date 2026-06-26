@@ -55,6 +55,7 @@ export default function TransformationPage() {
       ]}
       ctaTitle="Klaar om uw projecten en verandertrajecten succesvol te realiseren?"
       ctaText="Wij ondersteunen organisaties bij het realiseren van strategische initiatieven, complexe projecten en duurzame veranderingen. Neem contact met ons op voor een vrijblijvend gesprek."
+      image="/images/dienst-transformation.jpg"
     />
   );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,6 +19,7 @@ interface ServicePageProps {
   whyUs: string[];
   ctaTitle: string;
   ctaText: string;
+  image?: string;
 }
 
 export default function ServicePageLayout({
@@ -29,6 +31,7 @@ export default function ServicePageLayout({
   whyUs,
   ctaTitle,
   ctaText,
+  image,
 }: ServicePageProps) {
   return (
     <>
@@ -57,13 +60,25 @@ export default function ServicePageLayout({
 
       {/* Intro */}
       <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-4">
-            {intro.map((paragraph, i) => (
-              <p key={i} className="text-gray-600 leading-relaxed text-lg">
-                {paragraph}
-              </p>
-            ))}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`grid gap-12 items-center ${image ? "md:grid-cols-2" : ""}`}>
+            <div className="space-y-4">
+              {intro.map((paragraph, i) => (
+                <p key={i} className="text-gray-600 leading-relaxed text-lg">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            {image && (
+              <div className="relative h-80 md:h-96 rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src={image}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
