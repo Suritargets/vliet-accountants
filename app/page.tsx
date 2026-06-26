@@ -63,7 +63,7 @@ const services = [
 const teamMembers = [
   { name: "Guillaume Vliet MSc RA CA", role: "Managing Director", linkedin: "#", photo: "/images/team-1.jpeg", position: "object-top" },
   { name: "Majugra Andias MoA", role: "Supervisor", linkedin: "#", photo: "/images/team-2.jpg", position: "object-top" },
-  { name: "Natasha Anylus", role: "Senior Consultant", linkedin: "#", photo: "/images/natasha pasfoto.jpeg", position: "object-center" },
+  { name: "Natasha Anylus", role: "Senior Consultant", linkedin: "#", photo: "/images/natasha pasfoto.jpeg", position: "object-[center_15%]" },
 ];
 
 const highlights = [
