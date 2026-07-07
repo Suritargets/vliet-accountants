@@ -9,6 +9,17 @@ const FONT_STACK = "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-se
 
 type Locale = "nl" | "en";
 
+// All values below can originate from the public booking form (name, email,
+// phone, notes) — every interpolation into HTML must be escaped.
+function esc(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 const STRINGS = {
   nl: {
     greeting: (name: string) => `Beste ${name},`,
@@ -108,8 +119,8 @@ function renderDetailsTable(
   const cells = rows
     .map(
       (r) => `<tr>
-        <td style="padding:6px 0;color:#6b7280;font-size:13px;width:120px;">${r.label}</td>
-        <td style="padding:6px 0;color:${NAVY};font-size:13px;font-weight:600;">${r.value}</td>
+        <td style="padding:6px 0;color:#6b7280;font-size:13px;width:120px;">${esc(r.label)}</td>
+        <td style="padding:6px 0;color:${NAVY};font-size:13px;font-weight:600;">${esc(r.value)}</td>
       </tr>`
     )
     .join("");
@@ -133,7 +144,7 @@ export function buildBookingConfirmationMail(
     { label: t.fieldTime, value: args.time },
     { label: t.fieldTopic, value: args.topicLabel },
   ]);
-  const bodyHtml = `<p style="margin:0 0 8px;color:#374151;font-size:14px;line-height:1.6;">${t.greeting(args.name)}</p>
+  const bodyHtml = `<p style="margin:0 0 8px;color:#374151;font-size:14px;line-height:1.6;">${t.greeting(esc(args.name))}</p>
     <p style="margin:0;color:#374151;font-size:14px;line-height:1.6;">${t.confirmation.body}</p>
     ${details}`;
 
@@ -168,14 +179,16 @@ export function buildOfficeNotificationMail(
   if (args.phone) rows.push({ label: t.office.fieldPhone, value: args.phone });
   const details = renderDetailsTable(rows);
   const notesHtml = args.notes
-    ? `<p style="margin:16px 0 0;color:#374151;font-size:13px;line-height:1.6;"><strong>${t.office.fieldNotes}:</strong> ${args.notes}</p>`
+    ? `<p style="margin:16px 0 0;color:#374151;font-size:13px;line-height:1.6;"><strong>${t.office.fieldNotes}:</strong> ${esc(args.notes)}</p>`
     : "";
-  const bodyHtml = `<p style="margin:0 0 8px;color:#374151;font-size:14px;line-height:1.6;"><strong>${args.name}</strong></p>
+  const bodyHtml = `<p style="margin:0 0 8px;color:#374151;font-size:14px;line-height:1.6;"><strong>${esc(args.name)}</strong></p>
     ${details}
     ${notesHtml}`;
 
   return {
-    subject: t.office.subject(args.name),
+    // Subject is a raw header value, not HTML — strip CR/LF instead of
+    // HTML-escaping (header injection, not markup injection, is the risk here).
+    subject: t.office.subject(args.name.replace(/[\r\n]+/g, " ")),
     html: renderShell(args.locale, t.office.title, bodyHtml),
     text: `${args.name}\n\n${t.fieldDate}: ${args.date}\n${t.fieldTime}: ${args.time}\n${t.fieldTopic}: ${args.topicLabel}\n${t.office.fieldEmail}: ${args.email}${args.phone ? `\n${t.office.fieldPhone}: ${args.phone}` : ""}${args.notes ? `\n${t.office.fieldNotes}: ${args.notes}` : ""}`,
   };
@@ -205,7 +218,7 @@ export function buildStatusChangeMail(
     { label: t.fieldTime, value: args.time },
     { label: t.fieldTopic, value: args.topicLabel },
   ]);
-  const bodyHtml = `<p style="margin:0 0 8px;color:#374151;font-size:14px;line-height:1.6;">${t.greeting(args.name)}</p>
+  const bodyHtml = `<p style="margin:0 0 8px;color:#374151;font-size:14px;line-height:1.6;">${t.greeting(esc(args.name))}</p>
     <p style="margin:0 0 12px;color:#374151;font-size:14px;line-height:1.6;">${body}</p>
     <span style="display:inline-block;padding:4px 12px;border-radius:9999px;background-color:${pillColor}22;color:${NAVY};font-size:12px;font-weight:600;">${subject}</span>
     ${details}`;
