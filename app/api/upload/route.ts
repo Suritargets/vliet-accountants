@@ -26,8 +26,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unsupported file type" }, { status: 400 });
   }
 
+  const safeName = file.name
+    .split(/[/\\]/)
+    .pop()!
+    .replace(/[^a-zA-Z0-9._-]/g, "_")
+    .slice(0, 100);
+
   try {
-    const blob = await put(`${folder}/${file.name}`, file, {
+    const blob = await put(`${folder}/${safeName}`, file, {
       access: "public",
       addRandomSuffix: true,
     });

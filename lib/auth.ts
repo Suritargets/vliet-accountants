@@ -10,6 +10,9 @@ const SESSION_DAYS = 7;
 function secretKey() {
   const secret = process.env.SESSION_SECRET;
   if (!secret) throw new Error("SESSION_SECRET is not set");
+  if (secret.length < 32) {
+    throw new Error("SESSION_SECRET must be at least 32 characters");
+  }
   return new TextEncoder().encode(secret);
 }
 

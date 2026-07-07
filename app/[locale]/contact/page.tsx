@@ -1,20 +1,36 @@
-"use client";
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Clock, Phone, Mail, Send } from "lucide-react";
+import { MapPin, Clock, Phone, Mail } from "lucide-react";
 import { FacebookIcon, LinkedInIcon } from "@/components/social-icons";
+import ContactForm from "@/components/contact-form";
+import { buildAlternates } from "@/lib/seo/alternates";
+import { BUSINESS } from "@/lib/seo/site-info";
+
+const TITLE: Record<string, string> = {
+  nl: "Contact | Vliet Accountants & Consultants",
+  en: "Contact | Vliet Accountants & Consultants",
+};
+const DESCRIPTION: Record<string, string> = {
+  nl: "Neem contact op met Vliet Accountants & Consultants in Paramaribo voor audit, accountancy en strategisch advies.",
+  en: "Get in touch with Vliet Accountants & Consultants in Paramaribo for audit, accountancy and strategic advice.",
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const { canonical, languages } = buildAlternates(locale, "/contact");
+  return {
+    title: TITLE[locale] ?? TITLE.nl,
+    description: DESCRIPTION[locale] ?? DESCRIPTION.nl,
+    alternates: { canonical, languages },
+  };
+}
 
 export default function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitted(true);
-  }
-
   return (
     <>
       {/* Hero */}
@@ -48,7 +64,9 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <div className="font-semibold text-navy mb-1">Adres</div>
-                    <div className="text-gray-600">Wagenwegstraat 51</div>
+                    <address className="text-gray-600 not-italic">
+                      {BUSINESS.streetAddress}, {BUSINESS.addressLocality}, Suriname
+                    </address>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -58,7 +76,7 @@ export default function ContactPage() {
                   <div>
                     <div className="font-semibold text-navy mb-1">Telefoon</div>
                     <a href="tel:+5977202090" className="text-gray-600 hover:text-gold transition-colors">
-                      +597 720 2090
+                      {BUSINESS.telephone}
                     </a>
                   </div>
                 </div>
@@ -68,8 +86,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <div className="font-semibold text-navy mb-1">E-mail</div>
-                    <a href="mailto:info@vlietaccountants.com" className="text-gray-600 hover:text-gold transition-colors">
-                      info@vlietaccountants.com
+                    <a href={`mailto:${BUSINESS.email}`} className="text-gray-600 hover:text-gold transition-colors">
+                      {BUSINESS.email}
                     </a>
                   </div>
                 </div>
@@ -87,22 +105,22 @@ export default function ContactPage() {
               <div className="mt-10">
                 <h3 className="font-semibold text-navy mb-4">Volg ons op social media</h3>
                 <div className="flex items-center gap-4">
-                  <a
-                    href="https://www.facebook.com/profile.php?id=100073261638677"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:border-navy hover:text-navy transition-colors text-gray-400"
-                  >
-                    <FacebookIcon className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/company/vliet-accountants-consultants/posts/?feedView=all"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:border-navy hover:text-navy transition-colors text-gray-400"
-                  >
-                    <LinkedInIcon className="w-4 h-4" />
-                  </a>
+                  {BUSINESS.sameAs.map((href, i) => {
+                    const Icon = i === 0 ? FacebookIcon : LinkedInIcon;
+                    const label = i === 0 ? "Facebook" : "LinkedIn";
+                    return (
+                      <a
+                        key={href}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:border-navy hover:text-navy transition-colors text-gray-400"
+                      >
+                        <Icon className="w-4 h-4" />
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -121,90 +139,7 @@ export default function ContactPage() {
             {/* Contact form */}
             <div>
               <h2 className="text-2xl font-bold text-navy mb-8">Stuur ons een bericht</h2>
-              {submitted ? (
-                <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center">
-                  <div className="text-4xl mb-4">✓</div>
-                  <h3 className="font-semibold text-green-800 text-xl mb-2">Bericht verzonden</h3>
-                  <p className="text-green-700">
-                    Bedankt voor uw bericht. Wij nemen zo snel mogelijk contact met u op.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                        Voornaam *
-                      </label>
-                      <input
-                        required
-                        type="text"
-                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy/20 transition-colors"
-                        placeholder="Uw voornaam"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                        Achternaam *
-                      </label>
-                      <input
-                        required
-                        type="text"
-                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy/20 transition-colors"
-                        placeholder="Uw achternaam"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      E-mailadres *
-                    </label>
-                    <input
-                      required
-                      type="email"
-                      className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy/20 transition-colors"
-                      placeholder="uw@email.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Telefoonnummer
-                    </label>
-                    <input
-                      type="tel"
-                      className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy/20 transition-colors"
-                      placeholder="+597..."
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Organisatie
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy/20 transition-colors"
-                      placeholder="Naam van uw organisatie"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Uw bericht *
-                    </label>
-                    <textarea
-                      required
-                      rows={5}
-                      className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy/20 transition-colors resize-none"
-                      placeholder="Hoe kunnen wij u helpen?"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-navy text-white hover:bg-navy/90 font-semibold py-3"
-                  >
-                    <Send className="w-4 h-4 mr-2" /> Bericht versturen
-                  </Button>
-                </form>
-              )}
+              <ContactForm />
             </div>
           </div>
         </div>
@@ -216,7 +151,7 @@ export default function ContactPage() {
           <h2 className="text-2xl font-bold text-navy mb-6 pt-0">Onze locatie</h2>
           <div className="rounded-2xl overflow-hidden shadow-md border border-gray-100">
             <iframe
-              src="https://maps.google.com/maps?q=5.82883,-55.15789&z=17&output=embed"
+              src={`https://maps.google.com/maps?q=${BUSINESS.latitude},${BUSINESS.longitude}&z=17&output=embed`}
               width="100%"
               height="450"
               style={{ border: 0 }}

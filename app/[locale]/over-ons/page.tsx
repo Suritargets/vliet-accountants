@@ -5,8 +5,64 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, ArrowRight, Shield, BarChart3, FileText, Scale, Lightbulb, FolderKanban } from "lucide-react";
 import { LinkedInIcon } from "@/components/social-icons";
+import { BUSINESS } from "@/lib/seo/site-info";
 
 export const metadata = { title: "Over ons | Vliet Accountants & Consultants" };
+
+// Escape </script>-breakout, mirrors components/organization-jsonld.tsx.
+function safeJson(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+const faqItems: FaqItem[] = [
+  {
+    question: "Welke diensten biedt Vliet Accountants & Consultants aan?",
+    answer:
+      "Vliet Accountants & Consultants biedt zes dienstverleningen aan: Audit & Assurance, Internal Audit, Risk & Governance, Accounting & Reporting, Tax & Compliance, Advisory & Training en Transformation & Project Management.",
+  },
+  {
+    question: "Waar is Vliet Accountants & Consultants gevestigd?",
+    answer: `Vliet Accountants & Consultants is gevestigd aan de ${BUSINESS.streetAddress}, ${BUSINESS.addressLocality}, Suriname.`,
+  },
+  {
+    question: "Hoe lang is Vliet Accountants & Consultants al actief?",
+    answer:
+      "Vliet Accountants & Consultants heeft meer dan 15 jaar ervaring in audit, accountancy en advies.",
+  },
+  {
+    question: "Is Vliet Accountants & Consultants onafhankelijk?",
+    answer:
+      "Ja, Vliet Accountants & Consultants is een 100% onafhankelijk accountants-, audit- en advieskantoor.",
+  },
+  {
+    question: "Bij welke beroepsorganisaties is Vliet aangesloten?",
+    answer:
+      "Vliet Accountants & Consultants is aangesloten bij de NBA (Koninklijke Nederlandse Beroepsorganisatie van Accountants), de IAASB en de SCAI.",
+  },
+  {
+    question: "Hoe kan ik een afspraak maken?",
+    answer:
+      "U kunt eenvoudig online een afspraak maken via onze afsprakenpagina, of contact met ons opnemen via het contactformulier of telefonisch.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
 
 const values = [
   {
@@ -272,6 +328,44 @@ export default function OverOnsPage() {
             </Link>
           </Button>
         </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <Badge className="mb-4 bg-navy/10 text-navy border-navy/20 hover:bg-navy/10">Veelgestelde vragen</Badge>
+            <h2 className="text-3xl font-bold text-navy">Vaak gestelde vragen over Vliet</h2>
+          </div>
+          <div className="max-w-3xl mx-auto space-y-6">
+            {faqItems.map((item, index) => (
+              <Card key={item.question} className="border border-gray-100">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-navy">{item.question}</h3>
+                  {index === faqItems.length - 1 ? (
+                    <p className="text-gray-600 leading-relaxed mt-2">
+                      U kunt eenvoudig online een afspraak maken via onze{" "}
+                      <Link href="/afspraak" className="text-navy font-medium underline underline-offset-2 hover:text-gold">
+                        afsprakenpagina
+                      </Link>
+                      , of contact met ons opnemen via het{" "}
+                      <Link href="/contact" className="text-navy font-medium underline underline-offset-2 hover:text-gold">
+                        contactformulier
+                      </Link>{" "}
+                      of telefonisch.
+                    </p>
+                  ) : (
+                    <p className="text-gray-600 leading-relaxed mt-2">{item.answer}</p>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJson(faqJsonLd) }}
+        />
       </section>
     </>
   );

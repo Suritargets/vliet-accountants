@@ -4,6 +4,7 @@ import { MapPin, Clock, Phone } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { FacebookIcon, LinkedInIcon } from "@/components/social-icons";
 import { Separator } from "@/components/ui/separator";
+import { BUSINESS } from "@/lib/seo/site-info";
 
 const services = [ // eslint-disable-line @typescript-eslint/no-unused-vars
   { label: "Audit & Assurance", href: "/diensten/audit-assurance" },
@@ -76,7 +77,7 @@ export default async function Footer() {
               </li>
               <li className="flex items-start gap-2 text-white/70 text-sm">
                 <MapPin className="w-4 h-4 mt-0.5 text-gold shrink-0" />
-                <span>Wagenwegstraat 51</span>
+                <address className="not-italic">{BUSINESS.streetAddress}, {BUSINESS.addressLocality}, Suriname</address>
               </li>
               <li className="flex items-start gap-2 text-white/70 text-sm">
                 <Phone className="w-4 h-4 mt-0.5 text-gold shrink-0" />

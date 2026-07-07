@@ -47,6 +47,17 @@ const STRINGS = {
       bodyConfirmed: "Wij bevestigen hierbij uw afspraak. Wij zien u graag op de onderstaande datum en tijd.",
       bodyCancelled: "Uw afspraak is geannuleerd. Neem gerust contact met ons op om een nieuwe afspraak in te plannen.",
     },
+    contact: {
+      confirmationSubject: "Wij hebben uw bericht ontvangen",
+      confirmationTitle: "Bedankt voor uw bericht",
+      confirmationBody: "Wij hebben uw bericht ontvangen en reageren binnen één werkdag.",
+      officeSubject: (name: string) => `Nieuw contactformulier: ${name}`,
+      officeTitle: "Nieuw bericht via het contactformulier",
+      fieldEmail: "E-mail",
+      fieldPhone: "Telefoon",
+      fieldOrganization: "Organisatie",
+      fieldMessage: "Bericht",
+    },
   },
   en: {
     greeting: (name: string) => `Dear ${name},`,
@@ -73,6 +84,17 @@ const STRINGS = {
       titleCancelled: "Your appointment has been cancelled",
       bodyConfirmed: "We confirm your appointment. We look forward to seeing you on the date and time below.",
       bodyCancelled: "Your appointment has been cancelled. Please feel free to contact us to schedule a new one.",
+    },
+    contact: {
+      confirmationSubject: "We have received your message",
+      confirmationTitle: "Thank you for your message",
+      confirmationBody: "We have received your message and will respond within one business day.",
+      officeSubject: (name: string) => `New contact form message: ${name}`,
+      officeTitle: "New message via the contact form",
+      fieldEmail: "Email",
+      fieldPhone: "Phone",
+      fieldOrganization: "Organization",
+      fieldMessage: "Message",
     },
   },
 } as const;
@@ -227,5 +249,53 @@ export function buildStatusChangeMail(
     subject,
     html: renderShell(args.locale, title, bodyHtml),
     text: `${t.greeting(args.name)}\n\n${body}\n\n${t.fieldDate}: ${args.date}\n${t.fieldTime}: ${args.time}\n${t.fieldTopic}: ${args.topicLabel}\n\n${t.footer}`,
+  };
+}
+
+export interface ContactConfirmationMailArgs {
+  locale: Locale;
+  name: string;
+}
+
+export function buildContactConfirmationMail(
+  args: ContactConfirmationMailArgs
+): { subject: string; html: string; text: string } {
+  const t = STRINGS[args.locale];
+  const bodyHtml = `<p style="margin:0 0 8px;color:#374151;font-size:14px;line-height:1.6;">${t.greeting(esc(args.name))}</p>
+    <p style="margin:0;color:#374151;font-size:14px;line-height:1.6;">${t.contact.confirmationBody}</p>`;
+
+  return {
+    subject: t.contact.confirmationSubject,
+    html: renderShell(args.locale, t.contact.confirmationTitle, bodyHtml),
+    text: `${t.greeting(args.name)}\n\n${t.contact.confirmationBody}\n\n${t.footer}`,
+  };
+}
+
+export interface ContactOfficeMailArgs {
+  locale: Locale;
+  name: string;
+  email: string;
+  phone: string | null;
+  organization: string | null;
+  message: string;
+}
+
+export function buildContactOfficeMail(
+  args: ContactOfficeMailArgs
+): { subject: string; html: string; text: string } {
+  const t = STRINGS[args.locale];
+  const rows: { label: string; value: string }[] = [{ label: t.contact.fieldEmail, value: args.email }];
+  if (args.phone) rows.push({ label: t.contact.fieldPhone, value: args.phone });
+  if (args.organization) rows.push({ label: t.contact.fieldOrganization, value: args.organization });
+  const details = renderDetailsTable(rows);
+  const messageHtml = `<p style="margin:16px 0 0;color:#374151;font-size:13px;line-height:1.6;"><strong>${t.contact.fieldMessage}:</strong> ${esc(args.message)}</p>`;
+  const bodyHtml = `<p style="margin:0 0 8px;color:#374151;font-size:14px;line-height:1.6;"><strong>${esc(args.name)}</strong></p>
+    ${details}
+    ${messageHtml}`;
+
+  return {
+    subject: t.contact.officeSubject(args.name.replace(/[\r\n]+/g, " ")),
+    html: renderShell(args.locale, t.contact.officeTitle, bodyHtml),
+    text: `${args.name}\n\n${t.contact.fieldEmail}: ${args.email}${args.phone ? `\n${t.contact.fieldPhone}: ${args.phone}` : ""}${args.organization ? `\n${t.contact.fieldOrganization}: ${args.organization}` : ""}\n\n${t.contact.fieldMessage}: ${args.message}`,
   };
 }
