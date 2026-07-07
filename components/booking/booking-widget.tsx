@@ -41,7 +41,7 @@ export default function BookingWidget() {
   const t = useTranslations("booking");
   const locale = useLocale();
 
-  const [step, setStep] = useState<BookingStep>("date");
+  const [rawStep, setStep] = useState<BookingStep>("date");
   const [month, setMonth] = useState(currentMonth);
   const [monthDays, setMonthDays] = useState<MonthDayInfo[]>([]);
   const [monthLoading, setMonthLoading] = useState(true);
@@ -53,10 +53,14 @@ export default function BookingWidget() {
 
   const [state, formAction, pending] = useActionState(createAppointment, initialState);
 
-  // Load month availability.
+  // Success is derived, not stored — the widget shows the confirmation as
+  // soon as the server action reports success.
+  const step: BookingStep = state.status === "success" ? "done" : rawStep;
+
+  // Load month availability. `monthLoading` is set to true in the month-change
+  // handler (and starts true), so the effect only flips it off async.
   useEffect(() => {
     let cancelled = false;
-    setMonthLoading(true);
     fetch(`/api/appointments/month?month=${month}`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
@@ -91,21 +95,18 @@ export default function BookingWidget() {
     setSlots([]);
   }, []);
 
-  // Move to confirmation when the server action succeeds.
-  useEffect(() => {
-    if (state.status === "success") setStep("done");
-  }, [state]);
-
   // If the slot was taken/date gone while filling the form, send the user
-  // back to step 1 with fresh data.
+  // back to step 1 with fresh slot data. Reacting to the action result is a
+  // genuine external-system sync, hence the effect.
   useEffect(() => {
     if (
       state.status === "error" &&
       (state.code === "slotTaken" || state.code === "dateUnavailable")
     ) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStep("date");
-      if (selectedDate) selectDay(selectedDate);
       setSelectedTime(null);
+      if (selectedDate) selectDay(selectedDate);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
@@ -188,7 +189,10 @@ export default function BookingWidget() {
                       weekdays={weekdays}
                       canGoPrev={month > monthNow}
                       canGoNext={month < shiftMonth(monthNow, MAX_MONTHS_AHEAD)}
-                      onMonthChange={(d) => setMonth((m) => shiftMonth(m, d))}
+                      onMonthChange={(d) => {
+                        setMonthLoading(true);
+                        setMonth((m) => shiftMonth(m, d));
+                      }}
                       onSelectDay={selectDay}
                       prevLabel={t("calendar.prevMonth")}
                       nextLabel={t("calendar.nextMonth")}

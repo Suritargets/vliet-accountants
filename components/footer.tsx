@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { FacebookIcon, LinkedInIcon } from "@/components/social-icons";
 import { Separator } from "@/components/ui/separator";
 
-const services = [
+const services = [ // eslint-disable-line @typescript-eslint/no-unused-vars
   { label: "Audit & Assurance", href: "/diensten/audit-assurance" },
   { label: "Internal Audit, Risk & Governance", href: "/diensten/internal-audit-risk-governance" },
   { label: "Accounting & Reporting", href: "/diensten/accounting-reporting" },

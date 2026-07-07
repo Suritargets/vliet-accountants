@@ -10,7 +10,10 @@ export default function CookieBanner() {
   const t = useTranslations("cookies");
 
   useEffect(() => {
+    // localStorage is only readable after mount (SSR-safe); syncing that
+    // external state into React necessarily happens here.
     const consent = localStorage.getItem("cookie-consent");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!consent) setVisible(true);
   }, []);
 
