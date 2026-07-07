@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // Populates the English (locale='en') override rows for homepage_content and
 // services_content with hand-translated copy (no machine-translation API —
 // this is a one-time manual translation of the existing NL defaults).
