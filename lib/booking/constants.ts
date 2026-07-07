@@ -18,3 +18,12 @@ export const BOOKING_TOPICS = [
 export type BookingTopicKey = (typeof BOOKING_TOPICS)[number]["key"];
 
 export const BOOKING_TOPIC_KEYS = BOOKING_TOPICS.map((t) => t.key) as string[];
+
+const GENERAL_TOPIC_LABEL = { nl: "Algemene kennismaking", en: "General introduction" } as const;
+
+/** Human-readable topic label for server-side contexts without next-intl (e.g. email). */
+export function resolveTopicLabel(topic: string | null, locale: "nl" | "en"): string {
+  const match = BOOKING_TOPICS.find((t) => t.key === topic);
+  if (!match) return GENERAL_TOPIC_LABEL[locale];
+  return match.label ?? GENERAL_TOPIC_LABEL[locale];
+}

@@ -7,7 +7,9 @@ import { db } from "@/lib/db";
 import { appointments } from "@/drizzle/schema";
 import { getDayData } from "@/lib/booking/queries";
 import { rateLimit } from "@/lib/rate-limit";
-import { BOOKING_TOPIC_KEYS } from "@/lib/booking/constants";
+import { BOOKING_TOPIC_KEYS, resolveTopicLabel } from "@/lib/booking/constants";
+import { sendMail } from "@/lib/mail/send";
+import { buildBookingConfirmationMail, buildOfficeNotificationMail } from "@/lib/mail/templates";
 
 const appointmentSchema = z.object({
   date: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/),
@@ -98,6 +100,33 @@ export async function createAppointment(
       locale: data.locale,
       status: "pending",
       ipAddress: ip === "unknown" ? null : ip,
+    });
+
+    // 6. Best-effort notification emails. sendMail() is fail-open — a mail
+    // problem must never undo an already-successful booking.
+    const topicLabel = resolveTopicLabel(data.topic, data.locale);
+    await sendMail({
+      to: data.email,
+      ...buildBookingConfirmationMail({
+        locale: data.locale,
+        name: data.name,
+        date: data.date,
+        time: data.time,
+        topicLabel,
+      }),
+    });
+    await sendMail({
+      to: process.env.OFFICE_NOTIFICATION_EMAIL || "info@vlietaccountants.com",
+      ...buildOfficeNotificationMail({
+        locale: data.locale,
+        name: data.name,
+        email: data.email,
+        phone: data.phone || null,
+        date: data.date,
+        time: data.time,
+        topicLabel,
+        notes: data.notes || null,
+      }),
     });
 
     return { status: "success", date: data.date, time: data.time, topic: data.topic };
