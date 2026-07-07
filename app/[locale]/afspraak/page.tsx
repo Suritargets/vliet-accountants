@@ -1,6 +1,31 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import BookingWidget from "@/components/booking/booking-widget";
+import { buildAlternates } from "@/lib/seo/alternates";
+
+const TITLE: Record<string, string> = {
+  nl: "Afspraak maken | Vliet Accountants & Consultants",
+  en: "Schedule an appointment | Vliet Accountants & Consultants",
+};
+const DESCRIPTION: Record<string, string> = {
+  nl: "Plan online een vrijblijvende kennismaking met Vliet Accountants & Consultants. Kies zelf een datum en tijd die u schikt.",
+  en: "Book a free introductory meeting with Vliet Accountants & Consultants online. Choose a date and time that suits you.",
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const { canonical, languages } = buildAlternates(locale, "/afspraak");
+  return {
+    title: TITLE[locale] ?? TITLE.nl,
+    description: DESCRIPTION[locale] ?? DESCRIPTION.nl,
+    alternates: { canonical, languages },
+  };
+}
 
 export default async function AfspraakPage({
   params,

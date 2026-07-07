@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { setRequestLocale } from "next-intl/server";
@@ -16,8 +17,35 @@ import {
 } from "lucide-react";
 import { LinkedInIcon } from "@/components/social-icons";
 import { getHomepage } from "@/lib/content/queries";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 export const dynamic = "force-dynamic";
+
+const TITLE: Record<string, string> = {
+  nl: "Vliet Accountants & Consultants | Audit, Accountancy & Advies in Suriname",
+  en: "Vliet Accountants & Consultants | Audit, Accountancy & Advisory in Suriname",
+};
+const DESCRIPTION: Record<string, string> = {
+  nl: "Onafhankelijk accountants-, audit- en advieskantoor in Paramaribo. 15+ jaar ervaring in audit & assurance, accounting & reporting, tax & compliance en strategisch advies.",
+  en: "Independent accounting, audit and advisory firm in Paramaribo. 15+ years of experience in audit & assurance, accounting & reporting, tax & compliance and strategic advisory.",
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const { canonical, languages } = buildAlternates(locale, "/");
+  const title = TITLE[locale] ?? TITLE.nl;
+  const description = DESCRIPTION[locale] ?? DESCRIPTION.nl;
+  return {
+    title,
+    description,
+    alternates: { canonical, languages },
+    openGraph: { title, description, url: canonical },
+  };
+}
 
 const services = [
   {
