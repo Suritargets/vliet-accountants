@@ -268,13 +268,23 @@ export default async function HomePage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-10">Aangesloten bij</p>
           <div className="flex flex-wrap items-center justify-center gap-20">
-            <Image src="/images/cert-nba.png" alt="NBA" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
-            <div className="overflow-hidden h-24 relative opacity-70 hover:opacity-100 transition-opacity" style={{ width: '165px' }}>
+            <a href="https://www.nba.nl/" target="_blank" rel="noopener noreferrer" aria-label="NBA">
+              <Image src="/images/cert-nba.png" alt="NBA" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+            </a>
+            <a
+              href="https://www.iaasb.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="IAASB"
+              className="block overflow-hidden h-24 relative opacity-70 hover:opacity-100 transition-opacity"
+              style={{ width: '165px' }}
+            >
               <div style={{ position: 'absolute', right: 0, top: 0, height: '100%' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/images/cert-iaasb.png" alt="IAASB" style={{ height: '100%', width: 'auto', maxWidth: 'none' }} />
               </div>
-            </div>
+            </a>
+            {/* TODO: SCAI-URL nog niet bekend — logo blijft niet-klikbaar */}
             <Image src="/images/cert-scai.png" alt="SCAI" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
           </div>
         </div>
