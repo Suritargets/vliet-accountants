@@ -1,10 +1,31 @@
 import { Link } from "@/i18n/navigation";
+import { asc, desc, eq } from "drizzle-orm";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, ArrowRight, GraduationCap, Briefcase, TrendingUp, Target, Users, Lightbulb, MapPin, Clock, Mail } from "lucide-react";
+import { db } from "@/lib/db";
+import { vacancies, type Vacancy } from "@/drizzle/schema";
 
 export const metadata = { title: "Werken bij ons | Vliet Accountants & Consultants" };
+export const dynamic = "force-dynamic";
+
+// Active vacancies in the current language; EN falls back to the NL list
+// while no EN vacancies exist yet.
+async function getVacancies(locale: string): Promise<Vacancy[]> {
+  try {
+    const rows = await db
+      .select()
+      .from(vacancies)
+      .where(eq(vacancies.active, true))
+      .orderBy(asc(vacancies.sortOrder), desc(vacancies.createdAt));
+    const localized = rows.filter((v) => v.locale === locale);
+    return localized.length > 0 ? localized : rows.filter((v) => v.locale === "nl");
+  } catch {
+    return [];
+  }
+}
 
 const cultureValues = [
   {
@@ -65,7 +86,16 @@ const reasons = [
   },
 ];
 
-export default function WerkenBijOnsPage() {
+export default async function WerkenBijOnsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("careers");
+  const openVacancies = await getVacancies(locale);
+
   return (
     <>
       {/* Hero */}
@@ -210,186 +240,72 @@ export default function WerkenBijOnsPage() {
           </div>
 
           <div className="space-y-8">
+            {openVacancies.length === 0 && (
+              <p className="text-center text-gray-400 py-8">{t("noVacancies")}</p>
+            )}
 
-            {/* Vacature 1: Advisory */}
-            <Card className="border border-gray-100 hover:border-navy/20 hover:shadow-lg transition-all duration-200">
-              <CardContent className="p-8">
-                <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
-                  <div>
-                    <h3 className="text-2xl font-bold text-navy mb-2">(Senior) Consultant Advisory</h3>
-                    <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                      <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-gold" /> Paramaribo, Suriname</span>
-                      <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-gold" /> Fulltime</span>
+            {openVacancies.map((vacancy) => (
+              <Card
+                key={vacancy.id}
+                className="border border-gray-100 hover:border-navy/20 hover:shadow-lg transition-all duration-200"
+              >
+                <CardContent className="p-8">
+                  <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+                    <div>
+                      <h3 className="text-2xl font-bold text-navy mb-2">{vacancy.title}</h3>
+                      <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                        <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-gold" /> {vacancy.location}</span>
+                        <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-gold" /> {vacancy.employmentType}</span>
+                      </div>
                     </div>
+                    <Badge className="bg-gold/10 text-gold border-gold/30 hover:bg-gold/10 text-sm px-3 py-1">
+                      {vacancy.department}
+                    </Badge>
                   </div>
-                  <Badge className="bg-gold/10 text-gold border-gold/30 hover:bg-gold/10 text-sm px-3 py-1">Advisory</Badge>
-                </div>
 
-                <p className="text-gray-600 leading-relaxed mb-6">
-                  Wil jij organisaties helpen hun governance te versterken, risico&apos;s te beheersen en duurzame groei te realiseren? Als (Senior) Consultant Advisory maak je deel uit van een ambitieus en groeiend team waarin kwaliteit, ondernemerschap en persoonlijke ontwikkeling centraal staan. Je krijgt al vroeg verantwoordelijkheid, werkt rechtstreeks samen met cliënten en levert een zichtbare bijdrage aan complexe advies- en verandertrajecten.
-                </p>
+                  <p className="text-gray-600 leading-relaxed mb-6">{vacancy.description}</p>
 
-                <div className="grid md:grid-cols-3 gap-6 mb-6">
-                  <div>
-                    <h4 className="font-semibold text-navy mb-3">Werkzaamheden</h4>
-                    <ul className="space-y-2">
-                      {[
-                        "Consultancyopdrachten op het gebied van Corporate Governance, Risk Management & Compliance",
-                        "Ondersteuning bij organisatieverbeteringen en transformatieprojecten",
-                        "Uitvoeren van risicoanalyses en governance assessments",
-                        "Opstellen van adviesrapporten en managementpresentaties",
-                        "Begeleiden van junior consultants",
-                        "Verzorgen van workshops en trainingen",
-                      ].map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
-                          <CheckCircle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="grid md:grid-cols-3 gap-6 mb-6">
+                    {(
+                      [
+                        [t("duties"), vacancy.duties],
+                        [t("requirements"), vacancy.requirements],
+                        [t("offers"), vacancy.offers],
+                      ] as const
+                    ).map(([heading, items]) =>
+                      items.length === 0 ? null : (
+                        <div key={heading}>
+                          <h4 className="font-semibold text-navy mb-3">{heading}</h4>
+                          <ul className="space-y-2">
+                            {items.map((item) => (
+                              <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
+                                <CheckCircle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )
+                    )}
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-navy mb-3">Wat zoeken wij?</h4>
-                    <ul className="space-y-2">
-                      {[
-                        "Afgeronde hbo- of wo-opleiding (Accountancy, Bedrijfseconomie, Finance of Bedrijfskunde)",
-                        "2 tot 4 jaar relevante werkervaring in consultancy, accountancy of internal audit",
-                        "Sterke analytische en communicatieve vaardigheden",
-                        "Goede beheersing van de Nederlandse taal",
-                        "Beheersing van de Engelse taal is een pré",
-                      ].map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
-                          <CheckCircle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-navy mb-3">Wat bieden wij?</h4>
-                    <ul className="space-y-2">
-                      {[
-                        "Marktconform salaris, deels uitbetaald in valuta",
-                        "Goede werksfeer in een betrokken en hecht team",
-                        "Interne vakinhoudelijke en persoonlijke vaardigheidstrainingen",
-                        "Mogelijkheden voor professionele certificeringen",
-                      ].map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
-                          <CheckCircle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t border-gray-100">
-                  <span className="flex items-center gap-2 text-sm text-gray-500">
-                    <Mail className="w-4 h-4 text-gold" />
-                    Stuur je sollicitatiebrief en cv naar{" "}
-                    <a href="mailto:info@vlietaccountants.com" className="text-gold hover:underline font-medium">
-                      info@vlietaccountants.com
-                    </a>
-                  </span>
-                  <Button asChild className="bg-navy text-white hover:bg-navy/90 font-semibold shrink-0">
-                    <a href="mailto:info@vlietaccountants.com?subject=Sollicitatie (Senior) Consultant Advisory">
-                      Solliciteer nu <ArrowRight className="w-4 h-4 ml-2" />
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Vacature 2: Audit & Assurance */}
-            <Card className="border border-gray-100 hover:border-navy/20 hover:shadow-lg transition-all duration-200">
-              <CardContent className="p-8">
-                <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
-                  <div>
-                    <h3 className="text-2xl font-bold text-navy mb-2">(Senior) Assistant Accountant Audit &amp; Assurance</h3>
-                    <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                      <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-gold" /> Paramaribo, Suriname</span>
-                      <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-gold" /> Fulltime</span>
-                    </div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t border-gray-100">
+                    <span className="flex items-center gap-2 text-sm text-gray-500">
+                      <Mail className="w-4 h-4 text-gold" />
+                      Stuur je sollicitatiebrief en cv naar{" "}
+                      <a href={`mailto:${vacancy.applyEmail}`} className="text-gold hover:underline font-medium">
+                        {vacancy.applyEmail}
+                      </a>
+                    </span>
+                    <Button asChild className="bg-navy text-white hover:bg-navy/90 font-semibold shrink-0">
+                      <a href={`mailto:${vacancy.applyEmail}?subject=${encodeURIComponent(`Sollicitatie ${vacancy.title}`)}`}>
+                        {t("apply")} <ArrowRight className="w-4 h-4 ml-2" />
+                      </a>
+                    </Button>
                   </div>
-                  <Badge className="bg-navy/10 text-navy border-navy/20 hover:bg-navy/10 text-sm px-3 py-1">Audit &amp; Assurance</Badge>
-                </div>
-
-                <p className="text-gray-600 leading-relaxed mb-6">
-                  Wil jij werken aan uitdagende controle- én adviesopdrachten voor toonaangevende organisaties in Suriname? Als (Senior) Assistant Accountant maak je deel uit van een ambitieus en groeiend team waarin kwaliteit, persoonlijke ontwikkeling en samenwerking centraal staan. Je krijgt al vroeg verantwoordelijkheid en bouwt mee aan opdrachten die daadwerkelijk impact hebben bij onze cliënten.
-                </p>
-
-                <div className="grid md:grid-cols-3 gap-6 mb-6">
-                  <div>
-                    <h4 className="font-semibold text-navy mb-3">Werkzaamheden</h4>
-                    <ul className="space-y-2">
-                      {[
-                        "Uitvoeren van jaarrekeningcontroles van verschillende organisaties",
-                        "Opstellen van werkdossiers, rapportages en managementletters",
-                        "Ondersteuning bij consultancy-, governance- en internal audit-opdrachten",
-                        "Signaleren van risico's en verbetermogelijkheden bij cliënten",
-                        "Begeleiden van junior assistenten en stagiaires",
-                        "Professioneel contact onderhouden met cliënten",
-                      ].map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
-                          <CheckCircle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-navy mb-3">Wat zoeken wij?</h4>
-                    <ul className="space-y-2">
-                      {[
-                        "Relevante hbo- of wo-opleiding",
-                        "1 tot 4 jaar relevante werkervaring binnen de accountancy",
-                        "Goede analytische en communicatieve vaardigheden",
-                        "Affiniteit met audit, financiële verslaggeving en bedrijfsprocessen",
-                        "Professionele instelling en klantgerichte houding",
-                        "Goede beheersing van de Nederlandse taal (Engels is een pré)",
-                      ].map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
-                          <CheckCircle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-navy mb-3">Wat bieden wij?</h4>
-                    <ul className="space-y-2">
-                      {[
-                        "Marktconform salaris, deels uitbetaald in valuta",
-                        "Goede werksfeer in een betrokken en hecht team",
-                        "Interne vakinhoudelijke en persoonlijke vaardigheidstrainingen",
-                        "Mogelijkheden voor professionele certificeringen",
-                      ].map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
-                          <CheckCircle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t border-gray-100">
-                  <span className="flex items-center gap-2 text-sm text-gray-500">
-                    <Mail className="w-4 h-4 text-gold" />
-                    Stuur je sollicitatiebrief en cv naar{" "}
-                    <a href="mailto:info@vlietaccountants.com" className="text-gold hover:underline font-medium">
-                      info@vlietaccountants.com
-                    </a>
-                  </span>
-                  <Button asChild className="bg-navy text-white hover:bg-navy/90 font-semibold shrink-0">
-                    <a href="mailto:info@vlietaccountants.com?subject=Sollicitatie (Senior) Assistant Accountant Audit & Assurance">
-                      Solliciteer nu <ArrowRight className="w-4 h-4 ml-2" />
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>

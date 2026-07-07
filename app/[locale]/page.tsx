@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { setRequestLocale } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +15,9 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { LinkedInIcon } from "@/components/social-icons";
+import { getHomepage } from "@/lib/content/queries";
+
+export const dynamic = "force-dynamic";
 
 const services = [
   {
@@ -66,14 +70,15 @@ const teamMembers = [
   { name: "Natasha Anylus", role: "Senior Consultant", linkedin: "#", photo: "/images/natasha 1.jpeg", position: "object-[center_15%]" },
 ];
 
-const highlights = [
-  "Lokale expertise gecombineerd met internationale standaarden",
-  "Proactieve advisering en risicogerichte aanpak",
-  "Maatwerkoplossingen afgestemd op uw organisatie",
-  "Focus op kwaliteit, compliance en duurzame waardecreatie",
-];
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const content = await getHomepage(locale);
 
-export default function HomePage() {
   return (
     <>
       {/* Hero */}
@@ -93,23 +98,21 @@ export default function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-36">
           <div className="max-w-3xl">
             <Badge className="mb-6 bg-gold/20 text-gold border-gold/30 hover:bg-gold/20">
-              Audit · Accountancy · Strategisch Advies
+              {content.hero.badge}
             </Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              Kwaliteit in cijfers.{" "}
-              <span className="text-gold">Waarde in elke beslissing.</span>
+              {content.hero.titleLead}{" "}
+              <span className="text-gold">{content.hero.titleAccent}</span>
             </h1>
             <p className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed">
-              Uw specialist in audit, accountancy en strategisch financieel advies.
-              Wij combineren diepgaande expertise met een proactieve aanpak om
-              risico&apos;s te beheersen en duurzame groei te realiseren.
+              {content.hero.subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" className="bg-gold text-white hover:bg-gold/90 font-semibold px-8">
-                <Link href="/afspraak">Plan een kennismaking</Link>
+                <Link href="/afspraak">{content.hero.ctaPrimary}</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/30 text-white bg-transparent hover:bg-white/10">
-                <Link href="/diensten">Onze diensten</Link>
+                <Link href="/diensten">{content.hero.ctaSecondary}</Link>
               </Button>
             </div>
           </div>
@@ -120,12 +123,7 @@ export default function HomePage() {
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { value: "15+", label: "Jaar ervaring" },
-              { value: "100+", label: "Tevreden cliënten" },
-              { value: "6", label: "Dienstverleningen" },
-              { value: "100%", label: "Onafhankelijk" },
-            ].map((stat) => (
+            {content.stats.map((stat) => (
               <div key={stat.label}>
                 <div className="text-3xl font-bold text-navy">{stat.value}</div>
                 <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
@@ -140,22 +138,19 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-navy/10 text-navy border-navy/20 hover:bg-navy/10">Over ons</Badge>
+              <Badge className="mb-4 bg-navy/10 text-navy border-navy/20 hover:bg-navy/10">
+                {content.about.badge}
+              </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-navy mb-6 leading-tight">
-                Meer dan cijfers: wij creëren financiële waarde
+                {content.about.title}
               </h2>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Vliet Accountants & Consultants ondersteunt organisaties met hoogwaardige audit-,
-                accountancy- en adviesdiensten. Met diepgaande expertise en een proactieve aanpak
-                helpen wij u om risico&apos;s te beheersen, prestaties te verbeteren en duurzame
-                groei te realiseren.
-              </p>
-              <p className="text-gray-600 leading-relaxed mb-8">
-                Goed advies begint met luisteren. Daarom denken wij actief met u mee, signaleren
-                wij risico&apos;s tijdig en vertalen wij inzichten naar concrete, werkbare oplossingen.
-              </p>
+              {content.about.paragraphs.map((paragraph, i) => (
+                <p key={i} className={`text-gray-600 leading-relaxed ${i === content.about.paragraphs.length - 1 ? "mb-8" : "mb-4"}`}>
+                  {paragraph}
+                </p>
+              ))}
               <ul className="space-y-3 mb-8">
-                {highlights.map((item) => (
+                {content.about.highlights.map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span className="text-gray-700 text-sm">{item}</span>
@@ -164,7 +159,7 @@ export default function HomePage() {
               </ul>
               <Button asChild className="bg-navy text-white hover:bg-navy/90">
                 <Link href="/over-ons">
-                  Meer over ons <ArrowRight className="w-4 h-4 ml-2" />
+                  {content.about.buttonLabel} <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
             </div>
@@ -187,10 +182,14 @@ export default function HomePage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <Badge className="mb-4 bg-navy/10 text-navy border-navy/20 hover:bg-navy/10">Onze dienstverlening</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">Wat wij voor u kunnen betekenen</h2>
+            <Badge className="mb-4 bg-navy/10 text-navy border-navy/20 hover:bg-navy/10">
+              {content.servicesTeaser.badge}
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">
+              {content.servicesTeaser.title}
+            </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
-              Een breed pakket aan professionele diensten om organisaties te ondersteunen in iedere fase van hun ontwikkeling.
+              {content.servicesTeaser.subtitle}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -206,7 +205,7 @@ export default function HomePage() {
                       <h3 className="font-semibold text-navy text-lg mb-2">{service.title}</h3>
                       <p className="text-gray-500 text-sm leading-relaxed mb-4">{service.description}</p>
                       <div className="flex items-center gap-1 text-gold text-sm font-medium">
-                        Meer lezen <ArrowRight className="w-3.5 h-3.5" />
+                        {content.servicesTeaser.readMore} <ArrowRight className="w-3.5 h-3.5" />
                       </div>
                     </CardContent>
                   </Card>
@@ -221,13 +220,13 @@ export default function HomePage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <Badge className="mb-4 bg-navy/10 text-navy border-navy/20 hover:bg-navy/10">Ons team</Badge>
+            <Badge className="mb-4 bg-navy/10 text-navy border-navy/20 hover:bg-navy/10">
+              {content.team.badge}
+            </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">
-              Ervaren professionals, gericht op kwaliteit en resultaat
+              {content.team.title}
             </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">
-              Ons team bestaat uit ervaren professionals met expertise in audit, accountancy en advies.
-            </p>
+            <p className="text-gray-500 max-w-2xl mx-auto">{content.team.subtitle}</p>
           </div>
           <div className="grid sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
             {teamMembers.map((member) => (
@@ -256,16 +255,10 @@ export default function HomePage() {
       {/* CTA */}
       <section className="py-20 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Klaar om waarde te creëren voor uw organisatie?
-          </h2>
-          <p className="text-white/75 text-lg mb-10 leading-relaxed">
-            Wij combineren kwaliteit, inzicht en ervaring om organisaties te ondersteunen bij audit,
-            accountancy en strategisch advies. Plan een vrijblijvend gesprek en ontdek wat wij voor
-            u kunnen betekenen.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">{content.cta.title}</h2>
+          <p className="text-white/75 text-lg mb-10 leading-relaxed">{content.cta.text}</p>
           <Button asChild size="lg" className="bg-gold text-white hover:bg-gold/90 font-semibold px-10">
-            <Link href="/afspraak">Plan een kennismaking</Link>
+            <Link href="/afspraak">{content.cta.buttonLabel}</Link>
           </Button>
         </div>
       </section>

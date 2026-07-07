@@ -3,7 +3,8 @@ import { put } from "@vercel/blob";
 import { getSession } from "@/lib/auth";
 
 const MAX_SIZE = 8 * 1024 * 1024; // 8 MB
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
+// No SVG: uploaded SVGs can carry scripts (stored XSS). Photos only.
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 export async function POST(request: NextRequest) {
   const session = await getSession();
