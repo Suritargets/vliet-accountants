@@ -1,0 +1,115 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "allServices": "View all services →",
+    "allServicesShort": "All services",
+    "about": "About us",
+    "careers": "Careers",
+    "blog": "Blog",
+    "contact": "Contact",
+    "cta": "Schedule a consultation"
+  },
+  "footer": {
+    "about": "Vliet Accountants & Consultants supports organisations with high-quality audit, accountancy and advisory services. We combine quality, insight and experience to create lasting value.",
+    "navigation": "Navigation",
+    "contactTitle": "Get in touch",
+    "hours": "Mon – Fri 8:00 – 16:00",
+    "socialTitle": "Follow us on social media",
+    "rights": "All rights reserved.",
+    "designBy": "Design by",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions"
+  },
+  "cookies": {
+    "message": "We use cookies to improve your experience on our site.",
+    "privacyLink": "Privacy Policy",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
+  "booking": {
+    "heroBadge": "Appointment",
+    "heroTitleLead": "Schedule a",
+    "heroTitleAccent": "consultation",
+    "heroSubtitle": "Pick a date and time that suits you — we will take care of the rest.",
+    "steps": {
+      "date": "Date & time",
+      "service": "Topic",
+      "details": "Your details"
+    },
+    "calendar": {
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "weekdays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      "legend": {
+        "available": "Available",
+        "unavailable": "Unavailable"
+      },
+      "changeDate": "Change date",
+      "loading": "Loading availability…",
+      "noSlots": "No available times on this day.",
+      "chooseTime": "Choose a time"
+    },
+    "service": {
+      "title": "What would you like to discuss?",
+      "subtitle": "Choose the topic that fits best.",
+      "general": "General introduction",
+      "generalDesc": "A no-obligation introduction to our firm",
+      "continue": "Continue",
+      "back": "Back"
+    },
+    "details": {
+      "title": "Your details",
+      "subtitle": "We only use these details to confirm your appointment.",
+      "name": "Name",
+      "namePlaceholder": "Your full name",
+      "email": "Email address",
+      "emailPlaceholder": "you@example.com",
+      "phone": "Phone number",
+      "phonePlaceholder": "+597 …",
+      "notes": "Additional notes (optional)",
+      "notesPlaceholder": "Briefly tell us what you need help with…",
+      "submit": "Confirm appointment",
+      "submitting": "Submitting…",
+      "back": "Back"
+    },
+    "summary": {
+      "date": "Date",
+      "time": "Time",
+      "topic": "Topic"
+    },
+    "done": {
+      "title": "Thank you for your request!",
+      "text": "Your appointment request has been received. We will contact you as soon as possible to confirm the appointment.",
+      "another": "Schedule another appointment"
+    },
+    "errors": {
+      "rateLimited": "Too many attempts. Please try again in a few minutes.",
+      "invalid": "Please check the entered fields and try again.",
+      "dateUnavailable": "This date is no longer available. Please choose another date.",
+      "slotTaken": "This time slot was just taken. Please choose another time.",
+      "generic": "Something went wrong. Please try again later."
+    }
+  },
+  "blog": {
+    "title": "Blog & Insights",
+    "badge": "Blog",
+    "subtitle": "News, insights and practical knowledge from our team.",
+    "readMore": "Read more",
+    "empty": "There are no articles in this language yet.",
+    "backToOverview": "← Back to overview",
+    "publishedOn": "Published on"
+  },
+  "careers": {
+    "noVacancies": "There are currently no open vacancies.",
+    "apply": "Apply now",
+    "duties": "Responsibilities",
+    "requirements": "What we are looking for",
+    "offers": "What we offer"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "The page you are looking for does not exist or has been moved.",
+    "backHome": "Back to home"
+  }
+}
