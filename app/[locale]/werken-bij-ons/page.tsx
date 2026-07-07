@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -403,7 +403,7 @@ export default function WerkenBijOnsPage() {
             toegevoegde waarde belangrijk vinden. Jouw volgende stap begint hier.
           </p>
           <Button asChild className="bg-gold text-white hover:bg-gold/90 font-semibold">
-            <Link href="/contact">
+            <Link href="/afspraak">
               Plan een kennismakingsgesprek <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </Button>

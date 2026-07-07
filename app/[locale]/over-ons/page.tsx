@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -267,7 +267,7 @@ export default function OverOnsPage() {
             sterke, beheerste en toekomstbestendige organisatie.
           </p>
           <Button asChild className="bg-gold text-white hover:bg-gold/90 font-semibold">
-            <Link href="/contact">
+            <Link href="/afspraak">
               Plan een kennismaking <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </Button>

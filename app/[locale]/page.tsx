@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -106,7 +106,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" className="bg-gold text-white hover:bg-gold/90 font-semibold px-8">
-                <Link href="/contact">Plan een kennismaking</Link>
+                <Link href="/afspraak">Plan een kennismaking</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/30 text-white bg-transparent hover:bg-white/10">
                 <Link href="/diensten">Onze diensten</Link>
@@ -265,7 +265,7 @@ export default function HomePage() {
             u kunnen betekenen.
           </p>
           <Button asChild size="lg" className="bg-gold text-white hover:bg-gold/90 font-semibold px-10">
-            <Link href="/contact">Plan een kennismaking</Link>
+            <Link href="/afspraak">Plan een kennismaking</Link>
           </Button>
         </div>
       </section>

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { Menu, ChevronDown } from "lucide-react";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { WhatsAppIcon, FacebookIcon, LinkedInIcon } from "@/components/social-icons";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -18,18 +18,21 @@ const services = [
   { label: "Transformation & Project Management", href: "/diensten/transformation-project-management" },
 ];
 
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Over ons", href: "/over-ons" },
-  { label: "Werken bij ons", href: "/werken-bij-ons" },
-  { label: "Contact", href: "/contact" },
-];
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations("nav");
+
+  const navLinks = [
+    { label: t("about"), href: "/over-ons" },
+    { label: t("careers"), href: "/werken-bij-ons" },
+    { label: t("blog"), href: "/blog" },
+    { label: t("contact"), href: "/contact" },
+  ];
 
   const isActive = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
   const navClass = (href: string) =>
@@ -38,6 +41,12 @@ export default function Navbar() {
         ? "text-navy font-semibold border-b-2 border-gold"
         : "text-gray-700 hover:text-navy hover:bg-gray-50"
     }`;
+
+  const switchLocale = (nextLocale: "nl" | "en") => {
+    if (nextLocale !== locale) {
+      router.replace(pathname, { locale: nextLocale });
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
@@ -60,9 +69,19 @@ export default function Navbar() {
               </a>
             </div>
             <div className="flex items-center gap-2 border-l border-white/20 pl-4">
-              <button className="font-semibold text-gold">NL</button>
+              <button
+                onClick={() => switchLocale("nl")}
+                className={locale === "nl" ? "font-semibold text-gold" : "hover:text-gold transition-colors"}
+              >
+                NL
+              </button>
               <span className="text-white/40">|</span>
-              <button className="hover:text-gold transition-colors">EN</button>
+              <button
+                onClick={() => switchLocale("en")}
+                className={locale === "en" ? "font-semibold text-gold" : "hover:text-gold transition-colors"}
+              >
+                EN
+              </button>
             </div>
           </div>
         </div>
@@ -86,7 +105,7 @@ export default function Navbar() {
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
             <Link href="/" className={navClass("/")}>
-              Home
+              {t("home")}
             </Link>
 
             {/* Diensten dropdown */}
@@ -99,7 +118,7 @@ export default function Navbar() {
                 href="/diensten"
                 className={`flex items-center gap-1 ${navClass("/diensten")}`}
               >
-                Diensten
+                {t("services")}
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${servicesOpen ? "rotate-180" : ""}`} />
               </Link>
 
@@ -110,7 +129,7 @@ export default function Navbar() {
                       href="/diensten"
                       className="text-xs font-semibold text-navy/60 uppercase tracking-wider hover:text-gold transition-colors"
                     >
-                      Alle diensten bekijken →
+                      {t("allServices")}
                     </Link>
                   </div>
                   {services.map((service) => (
@@ -127,7 +146,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {navLinks.slice(1).map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -138,7 +157,7 @@ export default function Navbar() {
             ))}
 
             <Button asChild className="ml-4 bg-navy text-white hover:bg-navy/90 text-sm" size="sm">
-              <Link href="/contact">Plan een kennismaking</Link>
+              <Link href="/afspraak">{t("cta")}</Link>
             </Button>
           </div>
 
@@ -154,7 +173,7 @@ export default function Navbar() {
                   onClick={() => setOpen(false)}
                   className={`px-4 py-3 text-base rounded transition-colors ${isActive("/") ? "text-navy font-semibold border-l-4 border-gold pl-3" : "font-medium text-gray-700 hover:text-navy hover:bg-gray-50"}`}
                 >
-                  Home
+                  {t("home")}
                 </Link>
 
                 {/* Mobile diensten accordion */}
@@ -163,7 +182,7 @@ export default function Navbar() {
                     onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
                     className="w-full flex items-center justify-between px-4 py-3 text-base font-medium text-gray-700 rounded hover:text-navy hover:bg-gray-50 transition-colors"
                   >
-                    Diensten
+                    {t("services")}
                     <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileServicesOpen ? "rotate-180" : ""}`} />
                   </button>
                   {mobileServicesOpen && (
@@ -173,7 +192,7 @@ export default function Navbar() {
                         onClick={() => setOpen(false)}
                         className="block px-3 py-1.5 text-sm font-semibold text-navy hover:text-gold transition-colors"
                       >
-                        Alle diensten
+                        {t("allServicesShort")}
                       </Link>
                       {services.map((service) => (
                         <Link
@@ -189,7 +208,7 @@ export default function Navbar() {
                   )}
                 </div>
 
-                {navLinks.slice(1).map((link) => (
+                {navLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -200,9 +219,25 @@ export default function Navbar() {
                   </Link>
                 ))}
 
-                <Button asChild className="mt-4 bg-navy text-white hover:bg-navy/90">
-                  <Link href="/contact" onClick={() => setOpen(false)}>
-                    Plan een kennismaking
+                <div className="flex items-center gap-2 px-4 py-3">
+                  <button
+                    onClick={() => { switchLocale("nl"); setOpen(false); }}
+                    className={`text-sm ${locale === "nl" ? "font-semibold text-gold" : "text-gray-600"}`}
+                  >
+                    NL
+                  </button>
+                  <span className="text-gray-300">|</span>
+                  <button
+                    onClick={() => { switchLocale("en"); setOpen(false); }}
+                    className={`text-sm ${locale === "en" ? "font-semibold text-gold" : "text-gray-600"}`}
+                  >
+                    EN
+                  </button>
+                </div>
+
+                <Button asChild className="mt-2 bg-navy text-white hover:bg-navy/90">
+                  <Link href="/afspraak" onClick={() => setOpen(false)}>
+                    {t("cta")}
                   </Link>
                 </Button>
               </div>

@@ -1,0 +1,115 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Diensten",
+    "allServices": "Alle diensten bekijken →",
+    "allServicesShort": "Alle diensten",
+    "about": "Over ons",
+    "careers": "Werken bij ons",
+    "blog": "Blog",
+    "contact": "Contact",
+    "cta": "Plan een kennismaking"
+  },
+  "footer": {
+    "about": "Vliet Accountants & Consultants ondersteunt organisaties met hoogwaardige audit-, accountancy- en adviesdiensten. Wij combineren kwaliteit, inzicht en ervaring om duurzame waarde te creëren.",
+    "navigation": "Navigatie",
+    "contactTitle": "Maak contact met ons",
+    "hours": "Ma – Vr 8:00 – 16:00",
+    "socialTitle": "Bezoek ons op social media",
+    "rights": "Alle rechten voorbehouden.",
+    "designBy": "Design by",
+    "privacy": "Privacy Policy",
+    "terms": "Algemene Voorwaarden"
+  },
+  "cookies": {
+    "message": "Wij gebruiken cookies om uw ervaring op onze site te verbeteren.",
+    "privacyLink": "Privacy Policy",
+    "accept": "Accepteren",
+    "decline": "Weigeren"
+  },
+  "booking": {
+    "heroBadge": "Afspraak",
+    "heroTitleLead": "Plan een",
+    "heroTitleAccent": "kennismaking",
+    "heroSubtitle": "Kies een datum en tijd die u schikt — wij nemen de rest voor onze rekening.",
+    "steps": {
+      "date": "Datum & tijd",
+      "service": "Onderwerp",
+      "details": "Uw gegevens"
+    },
+    "calendar": {
+      "prevMonth": "Vorige maand",
+      "nextMonth": "Volgende maand",
+      "weekdays": ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"],
+      "legend": {
+        "available": "Beschikbaar",
+        "unavailable": "Niet beschikbaar"
+      },
+      "changeDate": "Datum wijzigen",
+      "loading": "Beschikbaarheid laden…",
+      "noSlots": "Geen beschikbare tijden op deze dag.",
+      "chooseTime": "Kies een tijd"
+    },
+    "service": {
+      "title": "Waar gaat het gesprek over?",
+      "subtitle": "Kies het onderwerp dat het beste past.",
+      "general": "Algemene kennismaking",
+      "generalDesc": "Vrijblijvend kennismaken met ons kantoor",
+      "continue": "Doorgaan",
+      "back": "Terug"
+    },
+    "details": {
+      "title": "Uw gegevens",
+      "subtitle": "Wij gebruiken deze gegevens alleen om uw afspraak te bevestigen.",
+      "name": "Naam",
+      "namePlaceholder": "Uw volledige naam",
+      "email": "E-mailadres",
+      "emailPlaceholder": "u@voorbeeld.com",
+      "phone": "Telefoonnummer",
+      "phonePlaceholder": "+597 …",
+      "notes": "Toelichting (optioneel)",
+      "notesPlaceholder": "Vertel kort waar u hulp bij zoekt…",
+      "submit": "Afspraak bevestigen",
+      "submitting": "Bezig met verzenden…",
+      "back": "Terug"
+    },
+    "summary": {
+      "date": "Datum",
+      "time": "Tijd",
+      "topic": "Onderwerp"
+    },
+    "done": {
+      "title": "Bedankt voor uw aanvraag!",
+      "text": "Uw afspraakverzoek is ontvangen. Wij nemen zo snel mogelijk contact met u op om de afspraak te bevestigen.",
+      "another": "Nog een afspraak plannen"
+    },
+    "errors": {
+      "rateLimited": "Te veel pogingen. Probeer het over enkele minuten opnieuw.",
+      "invalid": "Controleer de ingevulde velden en probeer het opnieuw.",
+      "dateUnavailable": "Deze datum is niet meer beschikbaar. Kies een andere datum.",
+      "slotTaken": "Dit tijdstip is zojuist vergeven. Kies een ander tijdstip.",
+      "generic": "Er ging iets mis. Probeer het later opnieuw."
+    }
+  },
+  "blog": {
+    "title": "Blog & Inzichten",
+    "badge": "Blog",
+    "subtitle": "Nieuws, inzichten en praktische kennis van ons team.",
+    "readMore": "Lees meer",
+    "empty": "Er zijn nog geen artikelen in deze taal.",
+    "backToOverview": "← Terug naar overzicht",
+    "publishedOn": "Gepubliceerd op"
+  },
+  "careers": {
+    "noVacancies": "Er zijn op dit moment geen openstaande vacatures.",
+    "apply": "Solliciteer nu",
+    "duties": "Werkzaamheden",
+    "requirements": "Wat zoeken wij",
+    "offers": "Wat bieden wij"
+  },
+  "notFound": {
+    "title": "Pagina niet gevonden",
+    "text": "De pagina die u zoekt bestaat niet of is verplaatst.",
+    "backHome": "Terug naar home"
+  }
+}
