@@ -59,6 +59,7 @@ export default async function ServicePage({
 
   return (
     <ServicePageLayout
+      locale={locale === "en" ? "en" : "nl"}
       badge={content.badge}
       title={content.title}
       subtitle={content.subtitle}

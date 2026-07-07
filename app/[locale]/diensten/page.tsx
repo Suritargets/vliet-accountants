@@ -1,11 +1,12 @@
+import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Shield, BarChart3, FileText, Scale, Lightbulb, FolderKanban, ArrowRight, type LucideIcon } from "lucide-react";
 import { getService } from "@/lib/content/queries";
+import { buildAlternates } from "@/lib/seo/alternates";
 
-export const metadata = { title: "Diensten | Vliet Accountants & Consultants" };
 export const dynamic = "force-dynamic";
 
 // Icons and routes stay in code; titles/descriptions come from the CMS
@@ -19,12 +20,30 @@ const SERVICE_CARDS: { icon: LucideIcon; href: string }[] = [
   { icon: FolderKanban, href: "/diensten/transformation-project-management" },
 ];
 
+const CHROME = {
+  nl: { title: "Diensten | Vliet Accountants & Consultants", readMore: "Meer lezen", contactCta: "Neem contact op" },
+  en: { title: "Services | Vliet Accountants & Consultants", readMore: "Read more", contactCta: "Contact us" },
+} as const;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const l = locale === "en" ? "en" : "nl";
+  const { canonical, languages } = buildAlternates(locale, "/diensten");
+  return { title: CHROME[l].title, alternates: { canonical, languages } };
+}
+
 export default async function DienstenPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const l = locale === "en" ? "en" : "nl";
+  const t = CHROME[l];
   const content = await getService("diensten-index", locale);
 
   return (
@@ -62,7 +81,7 @@ export default async function DienstenPage({
                       <h2 className="font-semibold text-navy text-xl mb-3">{service.title}</h2>
                       <p className="text-gray-500 leading-relaxed mb-5">{service.description}</p>
                       <div className="flex items-center gap-1 text-gold font-medium">
-                        Meer lezen <ArrowRight className="w-4 h-4" />
+                        {t.readMore} <ArrowRight className="w-4 h-4" />
                       </div>
                     </CardContent>
                   </Card>
@@ -79,7 +98,7 @@ export default async function DienstenPage({
           <p className="text-white/75 mb-8">{content.ctaText}</p>
           <Button asChild className="bg-gold text-white hover:bg-gold/90 font-semibold">
             <Link href="/contact">
-              Neem contact op <ArrowRight className="w-4 h-4 ml-2" />
+              {t.contactCta} <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </Button>
         </div>

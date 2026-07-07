@@ -47,50 +47,99 @@ export async function generateMetadata({
   };
 }
 
-const services = [
-  {
-    icon: FileText,
-    title: "Accounting & Reporting",
-    description:
-      "Ondersteuning bij financiële verslaggeving, jaarrekeningen en compliance voor betrouwbare en tijdige rapportages.",
-    href: "/diensten/accounting-reporting",
-  },
-  {
-    icon: Lightbulb,
-    title: "Advisory & Training",
-    description:
-      "Strategisch financieel advies gericht op waardecreatie, risicobeheersing en performance verbetering.",
-    href: "/diensten/advisory-training",
-  },
-  {
-    icon: Shield,
-    title: "Audit & Assurance",
-    description:
-      "Onafhankelijke en kwalitatieve auditdiensten gericht op betrouwbare financiële verslaggeving en effectieve interne beheersing.",
-    href: "/diensten/audit-assurance",
-  },
-  {
-    icon: BarChart3,
-    title: "Internal Audit, Risk & Governance",
-    description:
-      "Versterking van governance en interne beheersing door internal audit, risk assessments en evaluatie van beheersmaatregelen.",
-    href: "/diensten/internal-audit-risk-governance",
-  },
-  {
-    icon: Scale,
-    title: "Tax & Compliance",
-    description:
-      "Specialistisch belastingadvies en ondersteuning bij fiscale en wettelijke verplichtingen om risico's te beheersen.",
-    href: "/diensten/tax-compliance",
-  },
-  {
-    icon: FolderKanban,
-    title: "Transformation & Project Management",
-    description:
-      "Advies en maatwerktrainingen op het gebied van corporate governance, compliance en interne beheersing.",
-    href: "/diensten/transformation-project-management",
-  },
-];
+const services: Record<
+  "nl" | "en",
+  { icon: typeof FileText; title: string; description: string; href: string }[]
+> = {
+  nl: [
+    {
+      icon: FileText,
+      title: "Accounting & Reporting",
+      description:
+        "Ondersteuning bij financiële verslaggeving, jaarrekeningen en compliance voor betrouwbare en tijdige rapportages.",
+      href: "/diensten/accounting-reporting",
+    },
+    {
+      icon: Lightbulb,
+      title: "Advisory & Training",
+      description:
+        "Strategisch financieel advies gericht op waardecreatie, risicobeheersing en performance verbetering.",
+      href: "/diensten/advisory-training",
+    },
+    {
+      icon: Shield,
+      title: "Audit & Assurance",
+      description:
+        "Onafhankelijke en kwalitatieve auditdiensten gericht op betrouwbare financiële verslaggeving en effectieve interne beheersing.",
+      href: "/diensten/audit-assurance",
+    },
+    {
+      icon: BarChart3,
+      title: "Internal Audit, Risk & Governance",
+      description:
+        "Versterking van governance en interne beheersing door internal audit, risk assessments en evaluatie van beheersmaatregelen.",
+      href: "/diensten/internal-audit-risk-governance",
+    },
+    {
+      icon: Scale,
+      title: "Tax & Compliance",
+      description:
+        "Specialistisch belastingadvies en ondersteuning bij fiscale en wettelijke verplichtingen om risico's te beheersen.",
+      href: "/diensten/tax-compliance",
+    },
+    {
+      icon: FolderKanban,
+      title: "Transformation & Project Management",
+      description:
+        "Advies en maatwerktrainingen op het gebied van corporate governance, compliance en interne beheersing.",
+      href: "/diensten/transformation-project-management",
+    },
+  ],
+  en: [
+    {
+      icon: FileText,
+      title: "Accounting & Reporting",
+      description:
+        "Support with financial reporting, annual financial statements and compliance for reliable, timely reports.",
+      href: "/diensten/accounting-reporting",
+    },
+    {
+      icon: Lightbulb,
+      title: "Advisory & Training",
+      description:
+        "Strategic financial advice focused on value creation, risk management and performance improvement.",
+      href: "/diensten/advisory-training",
+    },
+    {
+      icon: Shield,
+      title: "Audit & Assurance",
+      description:
+        "Independent, high-quality audit services focused on reliable financial reporting and effective internal control.",
+      href: "/diensten/audit-assurance",
+    },
+    {
+      icon: BarChart3,
+      title: "Internal Audit, Risk & Governance",
+      description:
+        "Strengthening governance and internal control through internal audit, risk assessments and evaluation of controls.",
+      href: "/diensten/internal-audit-risk-governance",
+    },
+    {
+      icon: Scale,
+      title: "Tax & Compliance",
+      description:
+        "Specialist tax advice and support with fiscal and statutory obligations to manage risk.",
+      href: "/diensten/tax-compliance",
+    },
+    {
+      icon: FolderKanban,
+      title: "Transformation & Project Management",
+      description:
+        "Advice and tailored training in corporate governance, compliance and internal control.",
+      href: "/diensten/transformation-project-management",
+    },
+  ],
+};
 
 const teamMembers = [
   { name: "Guillaume Vliet MSc RA CA", role: "Managing Director", linkedin: "#", photo: "/images/team-1.jpeg", position: "object-top" },
@@ -106,6 +155,8 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const content = await getHomepage(locale);
+  const l = locale === "en" ? "en" : "nl";
+  const affiliatedLabel = l === "en" ? "Affiliated with" : "Aangesloten bij";
 
   return (
     <>
@@ -221,7 +272,7 @@ export default async function HomePage({
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service) => {
+            {services[l].map((service) => {
               const Icon = service.icon;
               return (
                 <Link key={service.href} href={service.href} className="group">
@@ -294,7 +345,7 @@ export default async function HomePage({
       {/* Aangesloten bij */}
       <section className="py-14 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-10">Aangesloten bij</p>
+          <p className="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-10">{affiliatedLabel}</p>
           <div className="flex flex-wrap items-center justify-center gap-20">
             <a href="https://www.nba.nl/" target="_blank" rel="noopener noreferrer" aria-label="NBA">
               <Image src="/images/cert-nba.png" alt="NBA" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
