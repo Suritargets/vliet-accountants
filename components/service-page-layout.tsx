@@ -11,6 +11,7 @@ interface ServiceItem {
 }
 
 interface ServicePageProps {
+  locale: "nl" | "en";
   badge: string;
   title: string;
   subtitle: string;
@@ -22,7 +23,25 @@ interface ServicePageProps {
   image?: string;
 }
 
+const CHROME = {
+  nl: {
+    back: "Terug naar diensten",
+    servicesHeading: "Onze diensten",
+    whyHeading: "Waarom Vliet Accountants & Consultants?",
+    contactCta: "Neem contact op",
+    allServicesCta: "Alle diensten",
+  },
+  en: {
+    back: "Back to services",
+    servicesHeading: "Our services",
+    whyHeading: "Why Vliet Accountants & Consultants?",
+    contactCta: "Contact us",
+    allServicesCta: "All services",
+  },
+} as const;
+
 export default function ServicePageLayout({
+  locale,
   badge,
   title,
   subtitle,
@@ -33,6 +52,7 @@ export default function ServicePageLayout({
   ctaText,
   image,
 }: ServicePageProps) {
+  const t = CHROME[locale];
   return (
     <>
       {/* Hero */}
@@ -46,7 +66,7 @@ export default function ServicePageLayout({
             href="/diensten"
             className="inline-flex items-center gap-2 text-white/60 hover:text-gold text-sm mb-8 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> Terug naar diensten
+            <ArrowLeft className="w-4 h-4" /> {t.back}
           </Link>
           <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 hover:bg-gold/20">
             {badge}
@@ -87,7 +107,7 @@ export default function ServicePageLayout({
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-navy mb-10">
-            Onze diensten
+            {t.servicesHeading}
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {services.map((service) => (
@@ -114,7 +134,7 @@ export default function ServicePageLayout({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-navy mb-8">
-            Waarom Vliet Accountants & Consultants?
+            {t.whyHeading}
           </h2>
           <ul className="space-y-3">
             {whyUs.map((item) => (
@@ -138,7 +158,7 @@ export default function ServicePageLayout({
               className="bg-gold text-white hover:bg-gold/90 font-semibold"
             >
               <Link href="/contact">
-                Neem contact op <ArrowRight className="w-4 h-4 ml-2" />
+                {t.contactCta} <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
             <Button
@@ -146,7 +166,7 @@ export default function ServicePageLayout({
               variant="outline"
               className="border-white/30 text-white bg-transparent hover:bg-white/10"
             >
-              <Link href="/diensten">Alle diensten</Link>
+              <Link href="/diensten">{t.allServicesCta}</Link>
             </Button>
           </div>
         </div>
