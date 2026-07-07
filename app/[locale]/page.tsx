@@ -284,8 +284,9 @@ export default async function HomePage({
                 <img src="/images/cert-iaasb.png" alt="IAASB" style={{ height: '100%', width: 'auto', maxWidth: 'none' }} />
               </div>
             </a>
-            {/* TODO: SCAI-URL nog niet bekend — logo blijft niet-klikbaar */}
-            <Image src="/images/cert-scai.png" alt="SCAI" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+            <a href="https://www.scai.sr/" target="_blank" rel="noopener noreferrer" aria-label="SCAI">
+              <Image src="/images/cert-scai.png" alt="SCAI" width={240} height={96} className="h-24 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+            </a>
           </div>
         </div>
       </section>
