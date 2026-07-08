@@ -12,6 +12,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CookieBanner from "@/components/cookie-banner";
 import OrganizationJsonLd from "@/components/organization-jsonld";
+import AnalyticsBeacon from "@/components/analytics-beacon";
 
 const geist = Geist({
   variable: "--font-sans",
@@ -82,6 +83,7 @@ export default async function LocaleLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <CookieBanner />
+          <AnalyticsBeacon />
         </NextIntlClientProvider>
         <Analytics />
       </body>
