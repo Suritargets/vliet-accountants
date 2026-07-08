@@ -1,13 +1,12 @@
 "use server";
 
-import { and, eq, ne } from "drizzle-orm";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { appointments } from "@/drizzle/schema";
-import { getDayData } from "@/lib/booking/queries";
 import { rateLimit } from "@/lib/rate-limit";
 import { resolveTopicLabel } from "@/lib/booking/constants";
 import { appointmentSchema, type BookingActionState } from "@/lib/booking/schema";
+import { checkSlotAvailable } from "@/lib/booking/availability-guard";
 import { sendMail } from "@/lib/mail/send";
 import { buildBookingConfirmationMail, buildOfficeNotificationMail } from "@/lib/mail/templates";
 
@@ -45,29 +44,11 @@ export async function createAppointment(
 
   try {
     // 3. Recompute availability server-side — never trust client state.
-    const day = await getDayData(data.date);
-    const slot = day.slots.find((s) => s.time === data.time);
-    if (!day.open || !slot) {
-      return { status: "error", code: "dateUnavailable" };
-    }
-    if (!slot.available) {
-      return { status: "error", code: "slotTaken" };
-    }
-
-    // 4. Direct duplicate check, narrowing the race window further.
-    const existing = await db
-      .select({ id: appointments.id })
-      .from(appointments)
-      .where(
-        and(
-          eq(appointments.date, data.date),
-          eq(appointments.time, data.time),
-          ne(appointments.status, "cancelled")
-        )
-      )
-      .limit(1);
-    if (existing.length > 0) {
-      return { status: "error", code: "slotTaken" };
+    // Also narrows the race window; the partial unique index (step 5) is
+    // the final, airtight guard against a concurrent insert.
+    const check = await checkSlotAvailable(data.date, data.time);
+    if (!check.ok) {
+      return { status: "error", code: check.code };
     }
 
     // 5. Insert. The partial unique index on (date, time) WHERE status !=
