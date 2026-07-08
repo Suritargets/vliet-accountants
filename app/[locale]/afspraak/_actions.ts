@@ -10,8 +10,6 @@ import { checkSlotAvailable } from "@/lib/booking/availability-guard";
 import { sendMail } from "@/lib/mail/send";
 import { buildBookingConfirmationMail, buildOfficeNotificationMail } from "@/lib/mail/templates";
 
-export type { BookingActionState };
-
 export async function createAppointment(
   _prevState: BookingActionState,
   formData: FormData
