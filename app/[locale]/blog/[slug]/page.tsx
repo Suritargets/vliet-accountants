@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
 import { db } from "@/lib/db";
 import { blogPosts, type BlogPost } from "@/drizzle/schema";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 export const dynamic = "force-dynamic";
 
@@ -28,14 +29,31 @@ async function findPost(slug: string): Promise<BlogPost | null> {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const post = await findPost(slug);
   if (!post) return {};
+
+  const title = `${post.title} | Vliet Accountants & Consultants`;
+  const description = post.excerpt || undefined;
+  const { canonical, languages } = buildAlternates(locale, `/blog/${slug}`);
+
   return {
-    title: `${post.title} | Vliet Accountants & Consultants`,
-    description: post.excerpt || undefined,
+    title,
+    description,
+    alternates: { canonical, languages },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "Vliet Accountants & Consultants",
+      locale: locale === "en" ? "en_US" : "nl_NL",
+      type: "article",
+      images: post.coverImage
+        ? [{ url: post.coverImage, width: 1200, height: 630 }]
+        : [{ url: "/images/Voorpagina.jpg", width: 1200, height: 630 }],
+    },
   };
 }
 

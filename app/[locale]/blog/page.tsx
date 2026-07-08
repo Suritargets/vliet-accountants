@@ -5,12 +5,35 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { blogPosts, type BlogPost } from "@/drizzle/schema";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Blog | Vliet Accountants & Consultants" };
+const TITLE: Record<string, string> = {
+  nl: "Blog | Vliet Accountants & Consultants",
+  en: "Blog | Vliet Accountants & Consultants",
+};
+const DESCRIPTION: Record<string, string> = {
+  nl: "Nieuws, inzichten en praktische kennis van ons team over audit, accountancy en advies.",
+  en: "News, insights and practical knowledge from our team on audit, accountancy and advisory.",
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const { canonical, languages } = buildAlternates(locale, "/blog");
+  return {
+    title: TITLE[locale] ?? TITLE.nl,
+    description: DESCRIPTION[locale] ?? DESCRIPTION.nl,
+    alternates: { canonical, languages },
+  };
+}
 
 function formatDate(date: Date | null, locale: string) {
   if (!date) return "";

@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import { Badge } from "@/components/ui/badge";
 import { db } from "@/lib/db";
 import { pages, type Page } from "@/drizzle/schema";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 export const dynamic = "force-dynamic";
 
@@ -37,9 +38,11 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const page = await findPage(slug, locale);
   if (!page) return {};
+  const { canonical, languages } = buildAlternates(locale, `/${slug}`);
   return {
     title: `${page.metaTitle || page.title} | Vliet Accountants & Consultants`,
     description: page.metaDescription || undefined,
+    alternates: { canonical, languages },
   };
 }
 

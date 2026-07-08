@@ -43,7 +43,15 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical, languages },
-    openGraph: { title, description, url: canonical },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "Vliet Accountants & Consultants",
+      locale: locale === "en" ? "en_US" : "nl_NL",
+      type: "website",
+      images: [{ url: "/images/Voorpagina.jpg", width: 1200, height: 630 }],
+    },
   };
 }
 
