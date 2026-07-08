@@ -27,13 +27,27 @@ function safeEqual(a: string, b: string) {
   return timingSafeEqual(bufA, bufB);
 }
 
+// Fixed list of admin accounts via env vars — no users table. ADMIN_EMAIL_2/
+// ADMIN_PASSWORD_2 is optional; when unset, only the original account works.
+function adminAccounts(): { email: string; password: string }[] {
+  const accounts: { email: string; password: string }[] = [];
+  if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
+    accounts.push({ email: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD });
+  }
+  if (process.env.ADMIN_EMAIL_2 && process.env.ADMIN_PASSWORD_2) {
+    accounts.push({ email: process.env.ADMIN_EMAIL_2, password: process.env.ADMIN_PASSWORD_2 });
+  }
+  return accounts;
+}
+
 export function validateCredentials(email: string, password: string) {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminEmail || !adminPassword) return false;
-  const emailOk = safeEqual(email.trim().toLowerCase(), adminEmail.toLowerCase());
-  const passwordOk = safeEqual(password, adminPassword);
-  return emailOk && passwordOk;
+  let matched = false;
+  for (const account of adminAccounts()) {
+    const emailOk = safeEqual(email.trim().toLowerCase(), account.email.toLowerCase());
+    const passwordOk = safeEqual(password, account.password);
+    if (emailOk && passwordOk) matched = true;
+  }
+  return matched;
 }
 
 export async function createSession(email: string) {
