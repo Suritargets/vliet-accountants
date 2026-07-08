@@ -6,6 +6,8 @@ import { rateLimit } from "@/lib/rate-limit";
 import { sendMail } from "@/lib/mail/send";
 import { buildContactConfirmationMail, buildContactOfficeMail } from "@/lib/mail/templates";
 import { BUSINESS } from "@/lib/seo/site-info";
+import { db } from "@/lib/db";
+import { contactMessages } from "@/drizzle/schema";
 
 const contactSchema = z.object({
   firstName: z.string().trim().min(1).max(80),
@@ -51,6 +53,15 @@ export async function sendContactMessage(
   const fullName = `${data.firstName} ${data.lastName}`.trim();
 
   try {
+    await db.insert(contactMessages).values({
+      name: fullName,
+      email: data.email,
+      phone: data.phone || null,
+      organization: data.organization || null,
+      message: data.message,
+      locale: data.locale,
+    });
+
     await sendMail({
       to: data.email,
       ...buildContactConfirmationMail({ locale: data.locale, name: fullName }),

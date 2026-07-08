@@ -1,34 +1,16 @@
 "use server";
 
-import { and, eq, ne } from "drizzle-orm";
 import { headers } from "next/headers";
-import { z } from "zod";
 import { db } from "@/lib/db";
 import { appointments } from "@/drizzle/schema";
-import { getDayData } from "@/lib/booking/queries";
 import { rateLimit } from "@/lib/rate-limit";
-import { BOOKING_TOPIC_KEYS, resolveTopicLabel } from "@/lib/booking/constants";
+import { resolveTopicLabel } from "@/lib/booking/constants";
+import { appointmentSchema, type BookingActionState } from "@/lib/booking/schema";
+import { checkSlotAvailable } from "@/lib/booking/availability-guard";
 import { sendMail } from "@/lib/mail/send";
 import { buildBookingConfirmationMail, buildOfficeNotificationMail } from "@/lib/mail/templates";
 
-const appointmentSchema = z.object({
-  date: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/),
-  time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
-  topic: z.string().refine((t) => BOOKING_TOPIC_KEYS.includes(t)),
-  name: z.string().trim().min(2).max(120),
-  email: z.string().trim().email().max(255),
-  phone: z.string().trim().max(40).optional().or(z.literal("")),
-  notes: z.string().trim().max(2000).optional().or(z.literal("")),
-  locale: z.enum(["nl", "en"]),
-});
-
-export type BookingActionState =
-  | { status: "idle" }
-  | { status: "success"; date: string; time: string; topic: string }
-  | {
-      status: "error";
-      code: "rateLimited" | "invalid" | "dateUnavailable" | "slotTaken" | "generic";
-    };
+export type { BookingActionState };
 
 export async function createAppointment(
   _prevState: BookingActionState,
@@ -62,29 +44,11 @@ export async function createAppointment(
 
   try {
     // 3. Recompute availability server-side — never trust client state.
-    const day = await getDayData(data.date);
-    const slot = day.slots.find((s) => s.time === data.time);
-    if (!day.open || !slot) {
-      return { status: "error", code: "dateUnavailable" };
-    }
-    if (!slot.available) {
-      return { status: "error", code: "slotTaken" };
-    }
-
-    // 4. Direct duplicate check, narrowing the race window further.
-    const existing = await db
-      .select({ id: appointments.id })
-      .from(appointments)
-      .where(
-        and(
-          eq(appointments.date, data.date),
-          eq(appointments.time, data.time),
-          ne(appointments.status, "cancelled")
-        )
-      )
-      .limit(1);
-    if (existing.length > 0) {
-      return { status: "error", code: "slotTaken" };
+    // Also narrows the race window; the partial unique index (step 5) is
+    // the final, airtight guard against a concurrent insert.
+    const check = await checkSlotAvailable(data.date, data.time);
+    if (!check.ok) {
+      return { status: "error", code: check.code };
     }
 
     // 5. Insert. The partial unique index on (date, time) WHERE status !=

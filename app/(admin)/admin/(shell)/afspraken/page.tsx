@@ -48,6 +48,8 @@ export default async function AfsprakenPage({
       <AdminPageHeader
         title="Afspraken"
         description="Bevestig of annuleer binnengekomen afspraakverzoeken."
+        createHref="/admin/afspraken/nieuw"
+        createLabel="Nieuwe afspraak"
       />
 
       <div className="flex items-center gap-2 flex-wrap">
