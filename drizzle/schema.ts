@@ -109,6 +109,19 @@ export const pageViews = pgTable("page_views", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const errorSourceEnum = pgEnum("error_source", ["client", "server"]);
+
+export const errorEvents = pgTable("error_events", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  source: errorSourceEnum("source").notNull().default("server"),
+  context: varchar("context", { length: 100 }),
+  message: text("message").notNull(),
+  stack: text("stack"),
+  digest: varchar("digest", { length: 64 }),
+  path: varchar("path", { length: 255 }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // ── CMS ────────────────────────────────────────────────────────────────────
 
 export const postStatusEnum = pgEnum("post_status", ["draft", "published"]);
@@ -205,6 +218,7 @@ export type Appointment = typeof appointments.$inferSelect;
 export type ContactMessage = typeof contactMessages.$inferSelect;
 export type AdminLoginEvent = typeof adminLoginEvents.$inferSelect;
 export type PageView = typeof pageViews.$inferSelect;
+export type ErrorEvent = typeof errorEvents.$inferSelect;
 export type Page = typeof pages.$inferSelect;
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type Vacancy = typeof vacancies.$inferSelect;
