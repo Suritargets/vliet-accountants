@@ -71,6 +71,24 @@ export const appointments = pgTable(
   ]
 );
 
+export const contactMessageStatusEnum = pgEnum("contact_message_status", [
+  "new",
+  "read",
+  "handled",
+]);
+
+export const contactMessages = pgTable("contact_messages", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: varchar("name", { length: 160 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  phone: varchar("phone", { length: 40 }),
+  organization: varchar("organization", { length: 160 }),
+  message: text("message").notNull(),
+  locale: varchar("locale", { length: 2 }).notNull().default("nl"),
+  status: contactMessageStatusEnum("status").notNull().default("new"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // ── CMS ────────────────────────────────────────────────────────────────────
 
 export const postStatusEnum = pgEnum("post_status", ["draft", "published"]);
@@ -164,6 +182,7 @@ export const vacancies = pgTable("vacancies", {
 export type AvailabilityConfig = typeof availabilityConfig.$inferSelect;
 export type AvailabilityOverride = typeof availabilityOverrides.$inferSelect;
 export type Appointment = typeof appointments.$inferSelect;
+export type ContactMessage = typeof contactMessages.$inferSelect;
 export type Page = typeof pages.$inferSelect;
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type Vacancy = typeof vacancies.$inferSelect;
