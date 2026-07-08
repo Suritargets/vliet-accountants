@@ -4,10 +4,13 @@ import { useActionState, useCallback, useEffect, useMemo, useState } from "react
 import { AnimatePresence, motion } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowLeft, CalendarDays, Check, ChevronDown } from "lucide-react";
-import {
-  createAppointment,
-  type BookingActionState,
-} from "@/app/[locale]/afspraak/_actions";
+import { createAppointment } from "@/app/[locale]/afspraak/_actions";
+import type { BookingActionState } from "@/lib/booking/schema";
+
+type BookingAction = (
+  prevState: BookingActionState,
+  formData: FormData
+) => Promise<BookingActionState>;
 import { BOOKING_TOPICS, EASE, DURATION } from "@/lib/booking/constants";
 import BookingCalendar, { type MonthDayInfo } from "./calendar";
 import TimeSlots, { type SlotInfo } from "./time-slots";
@@ -37,7 +40,11 @@ function formatDate(date: string, locale: string) {
 
 const initialState: BookingActionState = { status: "idle" };
 
-export default function BookingWidget() {
+export default function BookingWidget({
+  action = createAppointment,
+}: {
+  action?: BookingAction;
+} = {}) {
   const t = useTranslations("booking");
   const locale = useLocale();
 
@@ -51,7 +58,7 @@ export default function BookingWidget() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
-  const [state, formAction, pending] = useActionState(createAppointment, initialState);
+  const [state, formAction, pending] = useActionState(action, initialState);
 
   // Success is derived, not stored — the widget shows the confirmation as
   // soon as the server action reports success.
