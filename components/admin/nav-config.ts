@@ -8,6 +8,8 @@ import {
   Newspaper,
   Users,
   MessageSquare,
+  BarChart3,
+  ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
 
@@ -43,6 +45,13 @@ export const adminNav: AdminNavSection[] = [
       { label: "Pagina's", href: "/admin/paginas", icon: FileText },
       { label: "Blog", href: "/admin/blog", icon: Newspaper },
       { label: "Vacatures", href: "/admin/vacatures", icon: Users },
+    ],
+  },
+  {
+    title: "Inzicht",
+    items: [
+      { label: "Statistieken", href: "/admin/statistieken", icon: BarChart3 },
+      { label: "Logins", href: "/admin/logins", icon: ShieldCheck },
     ],
   },
 ];

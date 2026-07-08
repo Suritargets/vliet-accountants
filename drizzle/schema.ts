@@ -89,6 +89,26 @@ export const contactMessages = pgTable("contact_messages", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const adminLoginEvents = pgTable("admin_login_events", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  email: varchar("email", { length: 255 }).notNull(),
+  success: boolean("success").notNull(),
+  ipAddress: varchar("ip_address", { length: 45 }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const deviceTypeEnum = pgEnum("device_type", ["mobile", "tablet", "desktop"]);
+
+export const pageViews = pgTable("page_views", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  path: varchar("path", { length: 255 }).notNull(),
+  country: varchar("country", { length: 2 }).notNull().default("XX"),
+  deviceType: deviceTypeEnum("device_type").notNull().default("desktop"),
+  locale: varchar("locale", { length: 2 }).notNull().default("nl"),
+  visitorHash: varchar("visitor_hash", { length: 64 }).notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // ── CMS ────────────────────────────────────────────────────────────────────
 
 export const postStatusEnum = pgEnum("post_status", ["draft", "published"]);
@@ -183,6 +203,8 @@ export type AvailabilityConfig = typeof availabilityConfig.$inferSelect;
 export type AvailabilityOverride = typeof availabilityOverrides.$inferSelect;
 export type Appointment = typeof appointments.$inferSelect;
 export type ContactMessage = typeof contactMessages.$inferSelect;
+export type AdminLoginEvent = typeof adminLoginEvents.$inferSelect;
+export type PageView = typeof pageViews.$inferSelect;
 export type Page = typeof pages.$inferSelect;
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type Vacancy = typeof vacancies.$inferSelect;
