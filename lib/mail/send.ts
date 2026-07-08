@@ -1,5 +1,6 @@
 import "server-only";
 import type { MailMessage, SendResult } from "./types";
+import { logError } from "@/lib/error-log/log";
 
 // Dispatches to the configured provider. Never throws — a failed or slow
 // mail send must never block a booking or admin action. Mirrors the
@@ -22,6 +23,7 @@ export async function sendMail(message: MailMessage): Promise<SendResult> {
     return { ok: false, reason: "no-provider-configured" };
   } catch (error) {
     console.error("sendMail failed:", error);
+    await logError("sendMail", error);
     return { ok: false, reason: "unexpected-error" }; // fail-open by design
   }
 }

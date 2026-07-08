@@ -6,6 +6,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { availabilityConfig, availabilityOverrides } from "@/drizzle/schema";
 import { requireSession } from "@/lib/auth";
+import { logError } from "@/lib/error-log/log";
 
 const timeSchema = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/);
 const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
@@ -54,6 +55,7 @@ export async function saveWeekConfig(
     return { success: true, error: null };
   } catch (error) {
     console.error("saveWeekConfig failed:", error);
+    await logError("saveWeekConfig", error);
     return { success: false, error: "Opslaan mislukt. Probeer het opnieuw." };
   }
 }
@@ -106,6 +108,7 @@ export async function addOverride(
     return { success: true, error: null };
   } catch (error) {
     console.error("addOverride failed:", error);
+    await logError("addOverride", error);
     return { success: false, error: "Opslaan mislukt. Probeer het opnieuw." };
   }
 }

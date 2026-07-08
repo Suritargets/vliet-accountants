@@ -3,6 +3,7 @@ import { createHash } from "crypto";
 import { db } from "@/lib/db";
 import { pageViews } from "@/drizzle/schema";
 import { rateLimit } from "@/lib/rate-limit";
+import { logError } from "@/lib/error-log/log";
 
 function parseDeviceType(userAgent: string): "mobile" | "tablet" | "desktop" {
   const ua = userAgent.toLowerCase();
@@ -45,6 +46,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("track failed:", error);
+    await logError("track", error);
     return NextResponse.json({ ok: true }); // fail-open — never break the page
   }
 }

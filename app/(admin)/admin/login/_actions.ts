@@ -6,6 +6,7 @@ import { createSession, validateCredentials } from "@/lib/auth";
 import { rateLimit } from "@/lib/rate-limit";
 import { db } from "@/lib/db";
 import { adminLoginEvents } from "@/drizzle/schema";
+import { logError } from "@/lib/error-log/log";
 
 export interface LoginState {
   error: string | null;
@@ -21,6 +22,7 @@ async function logAttempt(email: string, success: boolean, ip: string) {
   } catch (error) {
     // Logging must never break the login flow itself.
     console.error("logAttempt failed:", error);
+    await logError("logAttempt", error);
   }
 }
 
