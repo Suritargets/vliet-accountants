@@ -7,6 +7,7 @@ import {
   FileText,
   Newspaper,
   Users,
+  MessageSquare,
   type LucideIcon,
 } from "lucide-react";
 
@@ -31,6 +32,7 @@ export const adminNav: AdminNavSection[] = [
     items: [
       { label: "Afspraken", href: "/admin/afspraken", icon: CalendarCheck },
       { label: "Beschikbaarheid", href: "/admin/beschikbaarheid", icon: CalendarCog },
+      { label: "Berichten", href: "/admin/berichten", icon: MessageSquare },
     ],
   },
   {

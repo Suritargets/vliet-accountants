@@ -6,6 +6,9 @@ const STYLES: Record<string, string> = {
   published: "bg-emerald-50 text-emerald-700 border-emerald-200",
   active: "bg-emerald-50 text-emerald-700 border-emerald-200",
   inactive: "bg-gray-100 text-gray-500 border-gray-200",
+  new: "bg-amber-50 text-amber-700 border-amber-200",
+  read: "bg-sky-50 text-sky-700 border-sky-200",
+  handled: "bg-emerald-50 text-emerald-700 border-emerald-200",
 };
 
 const LABELS: Record<string, string> = {
@@ -16,6 +19,9 @@ const LABELS: Record<string, string> = {
   published: "Gepubliceerd",
   active: "Actief",
   inactive: "Inactief",
+  new: "Nieuw",
+  read: "Gelezen",
+  handled: "Afgehandeld",
 };
 
 export default function StatusBadge({ status }: { status: string }) {
