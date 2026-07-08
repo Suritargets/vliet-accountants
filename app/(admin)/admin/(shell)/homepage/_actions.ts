@@ -5,6 +5,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { homepageContent } from "@/drizzle/schema";
 import { requireSession } from "@/lib/auth";
+import { logError } from "@/lib/error-log/log";
 
 export interface HomepageActionState {
   success: boolean;
@@ -111,6 +112,7 @@ export async function saveHomepage(
     return { success: true, error: null };
   } catch (error) {
     console.error("saveHomepage failed:", error);
+    await logError("saveHomepage", error);
     return { success: false, error: "Opslaan mislukt. Probeer het opnieuw." };
   }
 }

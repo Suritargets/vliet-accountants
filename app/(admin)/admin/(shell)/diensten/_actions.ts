@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { servicesContent } from "@/drizzle/schema";
 import { requireSession } from "@/lib/auth";
 import { SERVICE_KEYS } from "@/lib/content/services-defaults";
+import { logError } from "@/lib/error-log/log";
 
 export interface ServiceActionState {
   success: boolean;
@@ -93,6 +94,7 @@ export async function saveService(
     return { success: true, error: null };
   } catch (error) {
     console.error("saveService failed:", error);
+    await logError("saveService", error);
     return { success: false, error: "Opslaan mislukt. Probeer het opnieuw." };
   }
 }
