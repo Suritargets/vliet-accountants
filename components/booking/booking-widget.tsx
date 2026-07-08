@@ -6,15 +6,15 @@ import { useLocale, useTranslations } from "next-intl";
 import { ArrowLeft, CalendarDays, Check, ChevronDown } from "lucide-react";
 import { createAppointment } from "@/app/[locale]/afspraak/_actions";
 import type { BookingActionState } from "@/lib/booking/schema";
+import { BOOKING_TOPICS, EASE, DURATION } from "@/lib/booking/constants";
+import BookingCalendar, { type MonthDayInfo } from "./calendar";
+import TimeSlots, { type SlotInfo } from "./time-slots";
+import StepIndicator, { type BookingStep } from "./step-indicator";
 
 type BookingAction = (
   prevState: BookingActionState,
   formData: FormData
 ) => Promise<BookingActionState>;
-import { BOOKING_TOPICS, EASE, DURATION } from "@/lib/booking/constants";
-import BookingCalendar, { type MonthDayInfo } from "./calendar";
-import TimeSlots, { type SlotInfo } from "./time-slots";
-import StepIndicator, { type BookingStep } from "./step-indicator";
 
 const MAX_MONTHS_AHEAD = 3;
 

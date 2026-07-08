@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
 import { Check, Mail } from "lucide-react";
 import { db } from "@/lib/db";
@@ -40,7 +41,7 @@ export default async function BerichtenPage({
 
       <div className="flex items-center gap-2 flex-wrap">
         {FILTERS.map((f) => (
-          <a
+          <Link
             key={f.key}
             href={f.key === "all" ? "/admin/berichten" : `/admin/berichten?status=${f.key}`}
             className={`rounded-full border px-3.5 py-1.5 text-sm transition-colors ${
@@ -50,7 +51,7 @@ export default async function BerichtenPage({
             }`}
           >
             {f.label}
-          </a>
+          </Link>
         ))}
       </div>
 
