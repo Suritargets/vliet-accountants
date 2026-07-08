@@ -40,10 +40,22 @@ export async function generateMetadata({
     `/diensten/${service}`
   );
 
+  const title = `${SERVICE_LABELS[service as ServiceKey]} | Vliet Accountants & Consultants`;
+  const ogImage = content.image ?? "/images/Voorpagina.jpg";
+
   return {
-    title: `${SERVICE_LABELS[service as ServiceKey]} | Vliet Accountants & Consultants`,
+    title,
     description,
     alternates: { canonical, languages },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "Vliet Accountants & Consultants",
+      locale: locale === "en" ? "en_US" : "nl_NL",
+      type: "website",
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+    },
   };
 }
 
