@@ -123,7 +123,7 @@ export default async function Footer() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-white/50 text-sm">
           <span>
-            © 2025 Vliet Accountants &amp; Consultants. {t("rights")} — 2026 | {t("designBy")}{" "}
+            © {new Date().getFullYear()} Vliet Accountants &amp; Consultants. {t("rights")} | {t("designBy")}{" "}
             <a href="https://www.suritargets.com/en" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors underline underline-offset-2">
               Suritargets
             </a>
