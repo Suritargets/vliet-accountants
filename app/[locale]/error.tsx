@@ -11,6 +11,19 @@ export default function Error({
 }) {
   useEffect(() => {
     console.error(error);
+    fetch("/api/log-error", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: error.message,
+        stack: error.stack,
+        digest: error.digest,
+        path: window.location.pathname,
+      }),
+      keepalive: true,
+    }).catch(() => {
+      // Stil — een gemiste foutmelding mag nooit zichtbaar worden voor de bezoeker.
+    });
   }, [error]);
 
   return (

@@ -10,6 +10,7 @@ import {
   MessageSquare,
   BarChart3,
   ShieldCheck,
+  AlertTriangle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -52,6 +53,7 @@ export const adminNav: AdminNavSection[] = [
     items: [
       { label: "Statistieken", href: "/admin/statistieken", icon: BarChart3 },
       { label: "Logins", href: "/admin/logins", icon: ShieldCheck },
+      { label: "Fouten", href: "/admin/fouten", icon: AlertTriangle },
     ],
   },
 ];

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { vacancies } from "@/drizzle/schema";
 import { requireSession } from "@/lib/auth";
+import { logError } from "@/lib/error-log/log";
 
 export interface VacancyActionState {
   success: boolean;
@@ -84,6 +85,7 @@ export async function saveVacancy(
         .where(eq(vacancies.id, id));
     } catch (error) {
       console.error("saveVacancy (update) failed:", error);
+      await logError("saveVacancy-update", error);
       return { success: false, error: "Opslaan mislukt. Probeer het opnieuw." };
     }
     revalidateVacancyPaths();
@@ -99,6 +101,7 @@ export async function saveVacancy(
     newId = inserted.id;
   } catch (error) {
     console.error("saveVacancy (insert) failed:", error);
+    await logError("saveVacancy-insert", error);
     return { success: false, error: "Opslaan mislukt. Probeer het opnieuw." };
   }
   revalidateVacancyPaths();

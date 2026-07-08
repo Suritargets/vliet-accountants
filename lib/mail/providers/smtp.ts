@@ -1,6 +1,7 @@
 import "server-only";
 import nodemailer from "nodemailer";
 import type { MailMessage, SendResult } from "../types";
+import { logError } from "@/lib/error-log/log";
 
 function createTransport() {
   const host = process.env.SMTP_HOST;
@@ -42,6 +43,7 @@ export async function sendViaSmtp(message: MailMessage): Promise<SendResult> {
     return { ok: true };
   } catch (error) {
     console.error("sendViaSmtp failed:", error);
+    await logError("sendViaSmtp", error);
     return { ok: false, reason: "smtp-error" };
   }
 }

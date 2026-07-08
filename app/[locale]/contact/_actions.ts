@@ -8,6 +8,7 @@ import { buildContactConfirmationMail, buildContactOfficeMail } from "@/lib/mail
 import { BUSINESS } from "@/lib/seo/site-info";
 import { db } from "@/lib/db";
 import { contactMessages } from "@/drizzle/schema";
+import { logError } from "@/lib/error-log/log";
 
 const contactSchema = z.object({
   firstName: z.string().trim().min(1).max(80),
@@ -80,6 +81,7 @@ export async function sendContactMessage(
     return { status: "success" };
   } catch (error) {
     console.error("sendContactMessage failed:", error);
+    await logError("sendContactMessage", error);
     return { status: "error", code: "generic" };
   }
 }

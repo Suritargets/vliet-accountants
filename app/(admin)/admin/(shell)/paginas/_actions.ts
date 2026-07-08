@@ -7,6 +7,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { pages } from "@/drizzle/schema";
 import { requireSession } from "@/lib/auth";
+import { logError } from "@/lib/error-log/log";
 
 export interface PageActionState {
   success: boolean;
@@ -109,6 +110,7 @@ export async function savePage(
     revalidatePath("/admin/paginas");
   } catch (error) {
     console.error("savePage failed:", error);
+    await logError("savePage", error);
     return { success: false, error: "Opslaan mislukt. Probeer het opnieuw." };
   }
 

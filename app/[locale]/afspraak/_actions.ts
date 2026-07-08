@@ -9,6 +9,7 @@ import { appointmentSchema, type BookingActionState } from "@/lib/booking/schema
 import { checkSlotAvailable } from "@/lib/booking/availability-guard";
 import { sendMail } from "@/lib/mail/send";
 import { buildBookingConfirmationMail, buildOfficeNotificationMail } from "@/lib/mail/templates";
+import { logError } from "@/lib/error-log/log";
 
 export async function createAppointment(
   _prevState: BookingActionState,
@@ -99,6 +100,7 @@ export async function createAppointment(
       return { status: "error", code: "slotTaken" };
     }
     console.error("createAppointment failed:", error);
+    await logError("createAppointment", error);
     return { status: "error", code: "generic" };
   }
 }

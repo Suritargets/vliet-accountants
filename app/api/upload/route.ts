@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { getSession } from "@/lib/auth";
+import { logError } from "@/lib/error-log/log";
 
 const MAX_SIZE = 8 * 1024 * 1024; // 8 MB
 // No SVG: uploaded SVGs can carry scripts (stored XSS). Photos only.
@@ -40,6 +41,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: blob.url });
   } catch (error) {
     console.error("Upload failed:", error);
+    await logError("upload", error);
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }
 }

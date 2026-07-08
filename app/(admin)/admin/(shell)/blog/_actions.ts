@@ -7,6 +7,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { blogPosts } from "@/drizzle/schema";
 import { requireSession } from "@/lib/auth";
+import { logError } from "@/lib/error-log/log";
 
 export interface BlogActionState {
   success: boolean;
@@ -143,6 +144,7 @@ export async function saveBlogPost(
       return { success: false, error: "Deze slug is al in gebruik." };
     }
     console.error("saveBlogPost failed:", error);
+    await logError("saveBlogPost", error);
     return { success: false, error: "Opslaan mislukt. Probeer het opnieuw." };
   }
 
