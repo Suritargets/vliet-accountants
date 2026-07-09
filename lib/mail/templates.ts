@@ -3,11 +3,18 @@
 // React render context this module never runs inside (server actions call
 // it directly, not through a component tree).
 
+import { SITE_URL } from "@/lib/seo/site-info";
+
 const NAVY = "#1a2e5a";
 const GOLD = "#c3b19d";
 const FONT_STACK = "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+// logo-white.png is an icon mark, not a wordmark -- keep the text label next
+// to it so the brand name still reads when images are blocked (the default
+// in most mail clients until the recipient clicks "show images").
+const LOGO_URL = `${SITE_URL}/images/logo-white.png`;
 
 type Locale = "nl" | "en";
+type MailSource = "booking" | "contact";
 
 // All values below can originate from the public booking form (name, email,
 // phone, notes) — every interpolation into HTML must be escaped.
@@ -24,6 +31,10 @@ const STRINGS = {
   nl: {
     greeting: (name: string) => `Beste ${name},`,
     footer: "Vliet Accountants & Consultants — Wagenwegstraat 51, Suriname",
+    sentFrom: {
+      booking: "Deze e-mail is automatisch verzonden vanuit het boekingssysteem op vlietaccountants.com.",
+      contact: "Deze e-mail is automatisch verzonden vanuit het contactformulier op vlietaccountants.com.",
+    },
     fieldDate: "Datum",
     fieldTime: "Tijd",
     fieldTopic: "Onderwerp",
@@ -62,6 +73,10 @@ const STRINGS = {
   en: {
     greeting: (name: string) => `Dear ${name},`,
     footer: "Vliet Accountants & Consultants — Wagenwegstraat 51, Suriname",
+    sentFrom: {
+      booking: "This email was sent automatically from the booking system on vlietaccountants.com.",
+      contact: "This email was sent automatically from the contact form on vlietaccountants.com.",
+    },
     fieldDate: "Date",
     fieldTime: "Time",
     fieldTopic: "Topic",
@@ -99,7 +114,7 @@ const STRINGS = {
   },
 } as const;
 
-function renderShell(locale: Locale, title: string, bodyHtml: string): string {
+function renderShell(locale: Locale, source: MailSource, title: string, bodyHtml: string): string {
   const t = STRINGS[locale];
   return `<!doctype html>
 <html lang="${locale}">
@@ -109,8 +124,17 @@ function renderShell(locale: Locale, title: string, bodyHtml: string): string {
         <td align="center">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#ffffff;border-radius:12px;overflow:hidden;">
             <tr>
-              <td style="background-color:${NAVY};padding:24px 32px;">
-                <span style="color:#ffffff;font-size:16px;font-weight:700;letter-spacing:0.02em;">Vliet Accountants &amp; Consultants</span>
+              <td style="background-color:${NAVY};padding:20px 32px;">
+                <table role="presentation" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding-right:10px;">
+                      <img src="${LOGO_URL}" width="50" height="28" alt="" style="display:block;width:50px;height:28px;" />
+                    </td>
+                    <td>
+                      <span style="color:#ffffff;font-size:16px;font-weight:700;letter-spacing:0.02em;">Vliet Accountants &amp; Consultants</span>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
@@ -124,7 +148,8 @@ function renderShell(locale: Locale, title: string, bodyHtml: string): string {
             </tr>
             <tr>
               <td style="padding:20px 32px;background-color:#f3f4f6;">
-                <span style="color:#6b7280;font-size:12px;">${t.footer}</span>
+                <span style="color:#6b7280;font-size:12px;">${t.footer}</span><br />
+                <span style="color:#9ca3af;font-size:11px;">${t.sentFrom[source]}</span>
               </td>
             </tr>
           </table>
@@ -172,7 +197,7 @@ export function buildBookingConfirmationMail(
 
   return {
     subject: t.confirmation.subject,
-    html: renderShell(args.locale, t.confirmation.title, bodyHtml),
+    html: renderShell(args.locale, "booking", t.confirmation.title, bodyHtml),
     text: `${t.greeting(args.name)}\n\n${t.confirmation.body}\n\n${t.fieldDate}: ${args.date}\n${t.fieldTime}: ${args.time}\n${t.fieldTopic}: ${args.topicLabel}\n\n${t.footer}`,
   };
 }
@@ -211,7 +236,7 @@ export function buildOfficeNotificationMail(
     // Subject is a raw header value, not HTML — strip CR/LF instead of
     // HTML-escaping (header injection, not markup injection, is the risk here).
     subject: t.office.subject(args.name.replace(/[\r\n]+/g, " ")),
-    html: renderShell(args.locale, t.office.title, bodyHtml),
+    html: renderShell(args.locale, "booking", t.office.title, bodyHtml),
     text: `${args.name}\n\n${t.fieldDate}: ${args.date}\n${t.fieldTime}: ${args.time}\n${t.fieldTopic}: ${args.topicLabel}\n${t.office.fieldEmail}: ${args.email}${args.phone ? `\n${t.office.fieldPhone}: ${args.phone}` : ""}${args.notes ? `\n${t.office.fieldNotes}: ${args.notes}` : ""}`,
   };
 }
@@ -247,7 +272,7 @@ export function buildStatusChangeMail(
 
   return {
     subject,
-    html: renderShell(args.locale, title, bodyHtml),
+    html: renderShell(args.locale, "booking", title, bodyHtml),
     text: `${t.greeting(args.name)}\n\n${body}\n\n${t.fieldDate}: ${args.date}\n${t.fieldTime}: ${args.time}\n${t.fieldTopic}: ${args.topicLabel}\n\n${t.footer}`,
   };
 }
@@ -266,7 +291,7 @@ export function buildContactConfirmationMail(
 
   return {
     subject: t.contact.confirmationSubject,
-    html: renderShell(args.locale, t.contact.confirmationTitle, bodyHtml),
+    html: renderShell(args.locale, "contact", t.contact.confirmationTitle, bodyHtml),
     text: `${t.greeting(args.name)}\n\n${t.contact.confirmationBody}\n\n${t.footer}`,
   };
 }
@@ -295,7 +320,7 @@ export function buildContactOfficeMail(
 
   return {
     subject: t.contact.officeSubject(args.name.replace(/[\r\n]+/g, " ")),
-    html: renderShell(args.locale, t.contact.officeTitle, bodyHtml),
+    html: renderShell(args.locale, "contact", t.contact.officeTitle, bodyHtml),
     text: `${args.name}\n\n${t.contact.fieldEmail}: ${args.email}${args.phone ? `\n${t.contact.fieldPhone}: ${args.phone}` : ""}${args.organization ? `\n${t.contact.fieldOrganization}: ${args.organization}` : ""}\n\n${t.contact.fieldMessage}: ${args.message}`,
   };
 }
