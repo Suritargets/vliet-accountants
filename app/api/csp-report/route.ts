@@ -20,9 +20,19 @@ export async function POST(request: NextRequest) {
         : "unknown-directive";
     const blockedUri =
       typeof report?.["blocked-uri"] === "string" ? report["blocked-uri"] : "unknown";
+    // document-uri is a full absolute URL in a native CSP report; every
+    // other error_events row stores a relative path (e.g. window.location
+    // .pathname), so extract just the pathname here for a consistent
+    // "Pad" column on /admin/fouten.
     const documentUri =
       typeof report?.["document-uri"] === "string"
-        ? report["document-uri"].slice(0, 255)
+        ? (() => {
+            try {
+              return new URL(report["document-uri"]).pathname.slice(0, 255);
+            } catch {
+              return report["document-uri"].slice(0, 255);
+            }
+          })()
         : undefined;
 
     const message = `CSP violation: ${violatedDirective} blocked ${blockedUri}`;
