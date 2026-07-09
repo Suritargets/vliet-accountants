@@ -3,34 +3,48 @@ const REPORT_URI = "/api/csp-report";
 // Pure function — kept separate from proxy.ts so the actual policy values
 // are easy to read and adjust without touching the routing plumbing.
 //
-// script-src is 'self' only, deliberately WITHOUT a nonce/'strict-dynamic'.
-// A nonce-based policy was tried first and reverted: several public pages
-// are statically generated at build time (generateStaticParams — the
-// homepage and all 12 diensten pages) or cached after their first render
-// (ISR/Full Route Cache). Next.js only threads a nonce into a page's
-// <script> tags from *request-time* context (it reads an x-nonce-bearing
-// header via parseRequestHeaders()) — build-time static generation has no
-// request at all, so those pages get zero nonce on any script tag no
-// matter what value is chosen, and cached pages bake in whichever nonce
-// existed at cache-generation time while a fresh per-request (or even
-// per-deployment, if regenerated at the wrong scope) value in the response
-// header would drift out of sync. 'strict-dynamic' requires every single
-// script to carry a valid, matching nonce — on this codebase's caching
-// architecture that's not reliably achievable, and shipping it anyway
-// would mean enforcing CSP breaks hydration on exactly the fastest,
-// most-cached pages. 'self' has no such request-time dependency: it's a
-// static, deployment-independent rule that Next's own same-origin script
-// tags always satisfy, whether the page was rendered just now or a week
-// ago at build time.
+// script-src is 'self' 'unsafe-inline', not nonce/'strict-dynamic'. Two
+// attempts at a stricter policy were tried and reverted, both defeated by
+// the same root cause: Next.js App Router embeds genuinely inline <script>
+// tags on every page (the RSC hydration/flight-data payload), and a nonce
+// is the only way to allow specific inline scripts without 'unsafe-inline'.
+// Next.js only threads a nonce into those tags from *request-time* context
+// (it reads an x-nonce-bearing header via parseRequestHeaders()):
+//   1. A per-request random nonce: matches the response header for the one
+//      request that rendered a page, but several public pages are cached
+//      after their first render (ISR/Full Route Cache) — every subsequent
+//      cache hit serves that same HTML (with its nonce baked into the
+//      inline script) under a freshly generated, different header nonce.
+//   2. A deployment-scoped stable nonce (VERCEL_DEPLOYMENT_ID-derived):
+//      fixes the cache-consistency problem, but pages statically generated
+//      at build time (generateStaticParams — the homepage and all 12
+//      diensten pages) render with NO request at all, so they get zero
+//      nonce on any script tag regardless of what value is chosen.
+// Making nonces work correctly across build-time SSG, ISR, and dynamic
+// rendering in the same site requires Next.js 16's Cache Components/PPR
+// system (cacheComponents: true) — not enabled here, and enabling it is a
+// materially bigger architecture change than a CSP header, out of scope
+// for this fix.
 //
-// This does trade away nonce/strict-dynamic's defense against a same-origin
-// script-injection attack (an attacker who could get a malicious .js file
-// hosted under this origin's own paths could still have it execute). That
-// gap doesn't apply here in practice: the only upload path (app/api/upload
-// /route.ts) accepts image MIME types only (jpeg/png/webp/gif, no SVG,
-// which can carry scripts), so there's no way to plant an arbitrary script
-// file under this origin. Inline injected scripts (classic stored-XSS via
-// CMS content) and cross-origin script loading are still fully blocked.
+// 'unsafe-inline' has no request-time or build-time dependency: it works
+// identically for every rendering mode this site uses, which is the actual
+// requirement given the alternative (reverting the ISR/SSG migration back
+// to force-dynamic everywhere) would undo a real, measured performance
+// fix for a much smaller CSP security gain.
+//
+// What this still protects against: cross-origin script loading (a
+// malicious external <script src="https://evil.example/x.js">) and
+// same-origin script-file injection (mitigated separately anyway — the
+// only upload path, app/api/upload/route.ts, accepts image MIME types
+// only, no SVG, so there's no way to plant an arbitrary script file under
+// this origin). What it does NOT protect against: a classic stored-XSS
+// attack that injects an inline <script>...</script> block via
+// unescaped user/CMS content — the same class of gap 'unsafe-inline' on
+// style-src already accepts below, now extended to scripts for the same
+// practical reason. All CMS/booking/contact input in this codebase is
+// HTML-escaped before rendering (see lib/mail/templates.ts's esc()) —
+// this is defense in depth on top of that escaping, not a replacement
+// for it.
 //
 // style-src allows 'unsafe-inline' deliberately: several pages use React
 // inline style={{}} (e.g. the /admin/statistieken trend-chart bars), and
@@ -38,7 +52,7 @@ const REPORT_URI = "/api/csp-report";
 export function buildCsp(): string {
   return [
     `default-src 'self'`,
-    `script-src 'self'`,
+    `script-src 'self' 'unsafe-inline'`,
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' https://images.unsplash.com https://*.public.blob.vercel-storage.com data:`,
     `font-src 'self'`,
