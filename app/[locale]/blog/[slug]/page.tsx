@@ -10,8 +10,6 @@ import { db } from "@/lib/db";
 import { blogPosts, type BlogPost } from "@/drizzle/schema";
 import { buildAlternates } from "@/lib/seo/alternates";
 
-export const dynamic = "force-dynamic";
-
 // Slug is globally unique across all languages — lookup by slug alone.
 async function findPost(slug: string): Promise<BlogPost | null> {
   try {

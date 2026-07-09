@@ -14,8 +14,6 @@ const PAGE_KEYS: readonly string[] = SERVICE_KEYS.filter(
   (key) => key !== "diensten-index"
 );
 
-export const dynamic = "force-dynamic";
-
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
     PAGE_KEYS.map((service) => ({ locale, service }))

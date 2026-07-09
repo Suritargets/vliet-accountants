@@ -7,8 +7,6 @@ import { db } from "@/lib/db";
 import { pages, type Page } from "@/drizzle/schema";
 import { buildAlternates } from "@/lib/seo/alternates";
 
-export const dynamic = "force-dynamic";
-
 // Exact-locale match sorts before the NULL fallback row (ASC = NULLS LAST).
 async function findPage(slug: string, locale: string): Promise<Page | null> {
   try {

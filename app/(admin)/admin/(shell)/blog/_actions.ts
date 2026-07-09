@@ -1,6 +1,6 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -101,6 +101,19 @@ export async function saveBlogPost(
   const isNew = rawGroupId === "nieuw";
   const groupId = isNew ? crypto.randomUUID() : rawGroupId;
 
+  // The slug field is freely editable on existing posts (unlike CMS pages,
+  // where it's locked). Capture the pre-update slug so a rename can
+  // revalidate the OLD path too -- otherwise its cached page would never
+  // get invalidated and would keep serving stale content indefinitely.
+  let previousSlug: string | null = null;
+  if (!isNew) {
+    const [existing] = await db
+      .select({ slug: blogPosts.slug })
+      .from(blogPosts)
+      .where(and(eq(blogPosts.translationGroupId, groupId), eq(blogPosts.locale, locale)));
+    previousSlug = existing?.slug ?? null;
+  }
+
   try {
     await db
       .insert(blogPosts)
@@ -149,6 +162,7 @@ export async function saveBlogPost(
   }
 
   revalidateBlogPaths(slug);
+  if (previousSlug && previousSlug !== slug) revalidateBlogPaths(previousSlug);
 
   // redirect() throws — must stay outside try/catch.
   if (isNew) {
