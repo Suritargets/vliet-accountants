@@ -19,8 +19,6 @@ import { LinkedInIcon } from "@/components/social-icons";
 import { getHomepage } from "@/lib/content/queries";
 import { buildAlternates } from "@/lib/seo/alternates";
 
-export const dynamic = "force-dynamic";
-
 const TITLE: Record<string, string> = {
   nl: "Vliet Accountants & Consultants | Audit, Accountancy & Advies in Suriname",
   en: "Vliet Accountants & Consultants | Audit, Accountancy & Advisory in Suriname",

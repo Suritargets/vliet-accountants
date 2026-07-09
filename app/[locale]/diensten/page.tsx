@@ -7,8 +7,6 @@ import { Shield, BarChart3, FileText, Scale, Lightbulb, FolderKanban, ArrowRight
 import { getService } from "@/lib/content/queries";
 import { buildAlternates } from "@/lib/seo/alternates";
 
-export const dynamic = "force-dynamic";
-
 // Icons and routes stay in code; titles/descriptions come from the CMS
 // (services_content, key 'diensten-index') with code defaults as fallback.
 const SERVICE_CARDS: { icon: LucideIcon; href: string }[] = [

@@ -10,8 +10,6 @@ import { db } from "@/lib/db";
 import { blogPosts, type BlogPost } from "@/drizzle/schema";
 import { buildAlternates } from "@/lib/seo/alternates";
 
-export const dynamic = "force-dynamic";
-
 const TITLE: Record<string, string> = {
   nl: "Blog | Vliet Accountants & Consultants",
   en: "Blog | Vliet Accountants & Consultants",
