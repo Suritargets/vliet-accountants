@@ -31,9 +31,24 @@ const services = [
 ];
 
 const teamMembers = [
-  { name: "Guillaume Vliet MSc RA CA", role: "Managing Director", linkedin: "#", photo: "/images/team-1.jpeg" },
-  { name: "Majugra Andias MoA", role: "Supervisor", linkedin: "#", photo: "/images/team-2.jpg" },
-  { name: "Natasha Anylus", role: "Senior Consultant", linkedin: "#", photo: "/images/natasha 1.jpeg" },
+  {
+    name: "Guillaume Vliet MSc RA CA",
+    role: "Managing Director",
+    linkedin: "https://www.linkedin.com/in/guillaume-vliet-msc-ra-959148112/",
+    photo: "/images/team-1.jpeg",
+  },
+  {
+    name: "Majugra Andias MoA",
+    role: "Supervisor",
+    linkedin: "https://www.linkedin.com/in/majugra-andias-moa-4a23a01a7/",
+    photo: "/images/team-2.jpg",
+  },
+  {
+    name: "Natasha Anylus",
+    role: "Senior Consultant",
+    linkedin: "https://www.linkedin.com/in/natasha-v-anylus-33a2ba16a/",
+    photo: "/images/natasha 1.jpeg",
+  },
 ];
 
 const content: Record<
@@ -457,6 +472,8 @@ export default async function OverOnsPage({
                     </div>
                     <a
                       href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-navy/40 hover:text-gold transition-colors"
                       aria-label="LinkedIn"
                     >
