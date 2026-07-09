@@ -39,7 +39,10 @@ async function getAccessToken(tenantId: string, clientId: string, clientSecret: 
     throw new Error(`Graph token request failed: ${response.status} ${await response.text()}`);
   }
 
-  const data = (await response.json()) as { access_token: string; expires_in: number };
+  const data = (await response.json()) as { access_token?: string; expires_in?: number };
+  if (!data.access_token || !data.expires_in) {
+    throw new Error("Graph token response missing access_token or expires_in");
+  }
   cachedToken = { accessToken: data.access_token, expiresAt: now + data.expires_in * 1000 };
   return cachedToken.accessToken;
 }
@@ -56,6 +59,12 @@ export async function sendViaGraph(message: MailMessage): Promise<SendResult> {
 
     const token = await getAccessToken(tenantId, clientId, clientSecret);
 
+    // Graph's message resource has a single `body` (one contentType), unlike
+    // SMTP's multipart/alternative — there's no way to send message.text as
+    // a true plain-text fallback alongside the HTML part. This is a
+    // deliberate, known gap (not an oversight): the HTML templates are the
+    // primary format, and messages sent here won't have a text/plain part
+    // the way the SMTP provider's do.
     const response = await fetch(`https://graph.microsoft.com/v1.0/users/${encodeURIComponent(mailbox)}/sendMail`, {
       method: "POST",
       headers: {
