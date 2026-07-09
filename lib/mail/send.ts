@@ -14,8 +14,10 @@ export async function sendMail(message: MailMessage): Promise<SendResult> {
       return await sendViaSmtp(message);
     }
 
-    // "graph" is documented (see docs/superpowers/specs) but not yet built —
-    // falls through to the no-op branch below until providers/graph.ts exists.
+    if (provider === "graph") {
+      const { sendViaGraph } = await import("./providers/graph");
+      return await sendViaGraph(message);
+    }
 
     console.log(
       `[mail] MAIL_PROVIDER not set — skipping send to ${message.to}: "${message.subject}"`
