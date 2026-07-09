@@ -5,36 +5,17 @@ import { buildCsp } from "@/lib/csp/policy";
 
 const intlMiddleware = createMiddleware(routing);
 const CSP_HEADER_NAME = "Content-Security-Policy-Report-Only";
+const CSP = buildCsp();
 
 export default function middleware(request: NextRequest) {
-  const nonce = btoa(crypto.randomUUID());
-  const csp = buildCsp(nonce);
-
-  // Next.js reads the nonce back off the REQUEST headers (not the
-  // response) to apply it to its own framework-injected hydration/RSC
-  // scripts — see next/dist/server/app-render/app-render.js's
-  // parseRequestHeaders(), which looks for a
-  // content-security-policy(-report-only) request header. Setting the
-  // header only on the response (as an earlier version of this file did)
-  // leaves the nonce mechanism inert: Next's own scripts render without a
-  // nonce attribute, which would silently break the whole site once this
-  // policy is ever flipped from Report-Only to enforcing (strict-dynamic
-  // means unnonced scripts get blocked outright).
-  //
-  // next-intl's own middleware clones request.headers into whatever it
-  // forwards downstream (rewrite/next), so mutating it here before
-  // calling intlMiddleware() propagates the header through both branches
-  // below, not just the /admin passthrough.
-  request.headers.set(CSP_HEADER_NAME, csp);
-
   // /admin doesn't need next-intl's locale routing (same as before) — but
   // it still needs the CSP header, so it can't be excluded from the
   // matcher entirely the way it used to be.
   const response = request.nextUrl.pathname.startsWith("/admin")
-    ? NextResponse.next({ request: { headers: request.headers } })
+    ? NextResponse.next()
     : intlMiddleware(request);
 
-  response.headers.set(CSP_HEADER_NAME, csp);
+  response.headers.set(CSP_HEADER_NAME, CSP);
   return response;
 }
 
